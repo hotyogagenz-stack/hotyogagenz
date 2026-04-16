@@ -3,7 +3,8 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import TrustStrip from './components/TrustStrip';
 import YogaSlider from './components/YogaSlider';
-import PainPoints from './components/PainPoints';
+import YogaCollage from './components/YogaCollage';
+import WhatWeHelpWith from './components/WhatWeHelpWith';
 import ServicesGrid from './components/ServicesGrid';
 import MoodChecker from './components/MoodChecker';
 import WhyChooseUs from './components/WhyChooseUs';
@@ -26,7 +27,8 @@ export default function App() {
       <Hero onExplore={handleExplore} />
       <TrustStrip />
       <YogaSlider />
-      <PainPoints />
+      <YogaCollage />
+      <WhatWeHelpWith />
       <ServicesGrid />
       <MoodChecker />
       <WhyChooseUs />

@@ -37,9 +37,6 @@ export default function YogaSlider() {
               <img src={yogaImages[1].url} alt={yogaImages[1].alt} />
               <img src={yogaImages[2].url} alt={yogaImages[2].alt} />
             </div>
-            <div className="gallery-bottom">
-              <img src={yogaImages[3].url} alt={yogaImages[3].alt} />
-            </div>
           </div>
 
           {/* Content Panel on Right */}
