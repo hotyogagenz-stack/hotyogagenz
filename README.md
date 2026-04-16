@@ -1,10 +1,10 @@
-# HotYogaGenZ - React Port
+# Empty starter
 
-This repo contains a port of the original static site into a Vite + React app.
+This repository has been cleared to an empty React starter. Folder structure is preserved so you can build the site step-by-step.
 
 Quick start:
 
-1. Install dependencies
+1. Install dependencies (if needed)
 
 ```bash
 npm install
@@ -16,6 +16,4 @@ npm install
 npm run dev
 ```
 
-Files added:
-- `src/` - React app source
-- `package.json`, `vite.config.js` - build config
+The `src/main.jsx` contains a minimal placeholder component to confirm the dev server is working.
