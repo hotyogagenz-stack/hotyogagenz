@@ -16,121 +16,19 @@
         <div class="slide slide3"></div>
         <div class="slide slide4"></div>
         <div class="slide slide5"></div>
-    </div>
-
-    <nav class="navbar">
-        <ul class="nav-links">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#yoga">Hot Yoga</a></li>
-            <li><a href="#healer">Heart Healer</a></li>
-            <li><a href="#imotti">Mood Guide</a></li>
-            <li><a href="#listener">Vent Space</a></li>
-            <li><a href="#resources">Resources</a></li>
-        </ul>
-    </nav>
-
-    <section id="hero" class="hero full-height">
-        <div class="hero-glass">
+    <!doctype html>
+    <html lang="en">
+        <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Wellness Hub | GenZ Space</title>
+            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+            <!-- Vite entry -->
+        </head>
+        <body>
+            <div id="root"></div>
+            <script type="module" src="/src/main.jsx"></script>
+        </body>
+    </html>
             <span class="badge">A safe space for you ✨</span>
-            <h1>Talk. Heal. Breathe.</h1>
-            <p>Your GenZ space for hot yoga, emotional healing, and judgment-free talks.</p>
-            <div class="hero-btns">
-                <button class="btn-primary" onclick="scrollToSection('listener')">Start Talking</button>
-                <button class="btn-secondary" onclick="scrollToSection('yoga')">Join Yoga</button>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <p>Scroll down to explore</p>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </section>
-
-    <section id="imotti" class="section">
-        <div class="container">
-            <div class="glass-card big-card">
-                <h2>How's your heart feeling?</h2>
-                <div class="mood-grid">
-                    <button class="mood-btn" onclick="getGuidance('sad')">😢 Sad</button>
-                    <button class="mood-btn" onclick="getGuidance('anxious')">😰 Anxious</button>
-                    <button class="mood-btn" onclick="getGuidance('tired')">🥱 Overwhelmed</button>
-                    <button class="mood-btn" onclick="getGuidance('happy')">✨ Good</button>
-                </div>
-                <div id="guidance-result" class="result-box">Select your mood for instant guidance...</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="yoga" class="section yoga-section">
-        <div class="container split">
-            <div class="glass-card text-box">
-                <span class="tag">01. Movement</span>
-                <h2>Hot Yoga for <br>Emotional Release</h2>
-                <p>It's more than just sweat. It's about releasing the energy that no longer serves you. Online and offline sessions designed for GenZ bodies and minds.</p>
-                <button class="btn-accent">Book a Demo</button>
-            </div>
-            <div class="visual-box">
-                <img src="https://images.unsplash.com/photo-1599901860904-17e08c3d4e0e?w=600" alt="Yoga">
-            </div>
-        </div>
-    </section>
-
-    <section id="healer" class="section">
-        <div class="container">
-            <div class="glass-card text-center">
-                <span class="tag">02. Healing</span>
-                <h2>Mend Your Heart</h2>
-                <p>Guided sessions and journaling prompts for when life feels heavy. We help you navigate heartbreak, family stress, and self-doubt.</p>
-                <div class="journal-prompt">
-                    <p><strong>Today's Prompt:</strong> "What is one thing you're ready to let go of?"</p>
-                    <textarea placeholder="Start writing here..."></textarea>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="listener" class="section">
-        <div class="container split reverse">
-            <div class="glass-card text-box">
-                <span class="tag">03. Support</span>
-                <h2>Just Vent. <br>No Judgement.</h2>
-                <p>Speak to anonymous listeners who understand you. Career stress, relationship drama, or just a bad day—we are here to listen, not to fix.</p>
-                <button class="btn-primary">Connect with a Listener</button>
-            </div>
-            <div class="chat-ui">
-                <div class="msg bot">"I'm here. What's on your mind?"</div>
-                <div class="msg user">"Everything feels so fast lately..."</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="resources" class="section">
-        <div class="container">
-            <h2 class="section-title">Fresh Reads</h2>
-            <div class="blog-grid">
-                <div class="blog-card">
-                    <img src="https://images.unsplash.com/photo-1499209974431-9ddd3e6f117a?w=400" alt="Blog">
-                    <h3>Navigating Anxiety in 2026</h3>
-                    <p>Real tips for the modern world...</p>
-                </div>
-                <div class="blog-card">
-                    <img src="https://images.unsplash.com/photo-1512438248406-306bd283677e?w=400" alt="Blog">
-                    <h3>Setting Boundaries with Family</h3>
-                    <p>It's hard, but it's necessary...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="logo">Wellness Hub</div>
-        <p>Talk. Heal. Breathe. | You're not alone.</p>
-        <div class="socials">
-            <i class="fab fa-instagram"></i>
-            <i class="fab fa-tiktok"></i>
-            <i class="fab fa-discord"></i>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
