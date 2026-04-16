@@ -1,18 +1,39 @@
-import React from 'react'
-import Header from './components/Header'
-import Footer from './components/Footer'
+import React from 'react';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import TrustStrip from './components/TrustStrip';
+import YogaSlider from './components/YogaSlider';
+import PainPoints from './components/PainPoints';
+import ServicesGrid from './components/ServicesGrid';
+import MoodChecker from './components/MoodChecker';
+import WhyChooseUs from './components/WhyChooseUs';
+import Testimonials from './components/Testimonials';
+import BlogPreview from './components/BlogPreview';
+import FinalCTA from './components/FinalCTA';
+import Footer from './components/Footer';
 
-export default function App(){
+export default function App() {
+  const handleExplore = () => {
+    const element = document.getElementById('hot-yoga');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="app-root">
       <Header />
-      <main className="main-area">
-        <div className="container">
-          <h1>Welcome — New design starts here</h1>
-          <p>We'll build this step-by-step. Tell me which section to scaffold first.</p>
-        </div>
-      </main>
+      <Hero onExplore={handleExplore} />
+      <TrustStrip />
+      <YogaSlider />
+      <PainPoints />
+      <ServicesGrid />
+      <MoodChecker />
+      <WhyChooseUs />
+      <Testimonials />
+      <BlogPreview />
+      <FinalCTA />
       <Footer />
     </div>
-  )
+  );
 }
