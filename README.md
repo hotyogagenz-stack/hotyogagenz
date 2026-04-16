@@ -1,10 +1,10 @@
-# Empty starter
+New site starter
 
-This repository has been cleared to an empty React starter. Folder structure is preserved so you can build the site step-by-step.
+This repository was reset to a minimal Vite + React starter so we can build the site step-by-step.
 
 Quick start:
 
-1. Install dependencies (if needed)
+1. Install dependencies
 
 ```bash
 npm install
@@ -16,4 +16,4 @@ npm install
 npm run dev
 ```
 
-The `src/main.jsx` contains a minimal placeholder component to confirm the dev server is working.
+Tell me which section you'd like to scaffold first (hero, features, contact, pricing, etc.) and I'll implement it.
