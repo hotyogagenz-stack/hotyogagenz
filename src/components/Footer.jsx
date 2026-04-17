@@ -10,10 +10,10 @@ export default function Footer() {
               <span className="logo-icon"></span>
               <span className="logo-text">JUNE FLINT</span>
             </div>
-            <p className="footer-tagline">Your safe Gen Z wellness space</p>
+            <p className="footer-tagline">Your safe Gen Z wellness space. Explore mindfulness, healing, and authentic wellness guidance tailored for your journey.</p>
             <div className="social-links">
-              <a href="#instagram" className="social-link">📷 Instagram</a>
-              <a href="#support" className="social-link">💜 Support</a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">Instagram</a>
+              <a href="#support" className="social-link">Support</a>
             </div>
           </div>
 
@@ -41,7 +41,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} June Flint. All rights reserved.</p>
-          <p className="footer-note">Made with 💜 for Gen Z</p>
+          <p className="footer-note">Designed with care for Gen Z wellness</p>
         </div>
       </div>
     </footer>
