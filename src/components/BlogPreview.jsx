@@ -44,9 +44,6 @@ export default function BlogPreview() {
             <article key={blog.id} className="blog-card glass-card">
               <div className="blog-image">
                 <img src={blog.image} alt={blog.title} />
-                <span className="blog-category">
-                  {blog.category}
-                </span>
               </div>
               <div className="blog-content">
                 <div className="blog-meta">

@@ -290,6 +290,16 @@ h2, h3 {
   font-size: 1.1rem;
 }
 
+/* Hover effect for testimonial cards */
+.testimonial-card-static .testimonial-card-inner {
+  transition: all 0.3s ease;
+}
+
+.testimonial-card-static:hover .testimonial-card-inner {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .testimonials-section {
@@ -2137,11 +2147,11 @@ button:hover {
 .blog-preview-section .section-title {
   font-size: 2.2rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: white;
 }
 
 .blog-preview-section .section-subtitle {
-  color: var(--text-secondary);
+  color: white;
   font-size: 1.15rem;
   margin-top: 12px;
 }
@@ -2180,8 +2190,7 @@ button:hover {
   object-fit: cover;
 }
 
-.blog-category {
-  display: none;
+
 
 .blog-content {
   padding: 24px;

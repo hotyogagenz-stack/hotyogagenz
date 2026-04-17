@@ -4,19 +4,19 @@ const testimonials = [
   {
     quote: '"After months of feeling overwhelmed, I finally found a space where I could breathe. The combination of gentle yoga and someone truly listening changed everything for me."',
     author: 'Priya, 26',
-    avatar: '👩‍🦰',
+    avatar: 'P',
     role: 'Software Developer'
   },
   {
     quote: '"I was skeptical at first, but the practitioners here genuinely care. Each session leaves me feeling more centered and ready to face challenges."',
     author: 'Arjun, 31',
-    avatar: '👨‍🦱',
+    avatar: 'A',
     role: 'Marketing Lead'
   },
   {
     quote: '"The holistic approach helped me manage my anxiety in ways I never expected. I learned that asking for help is a strength, not a weakness."',
     author: 'Meera, 24',
-    avatar: '👩',
+    avatar: 'M',
     role: 'Graduate Student'
   }
 ];
