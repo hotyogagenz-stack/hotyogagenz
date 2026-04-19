@@ -46,13 +46,8 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <div className="footer-content">
-            <p className="footer-description">June Flint is dedicated to creating a safe, inclusive wellness space for Gen Z. We believe in authentic, holistic healing practices combined with modern guidance to support your unique wellness journey.</p>
-            <p className="footer-secondary">Our platform connects you with trusted wellness experts, mindfulness resources, and a supportive community. Whether you're exploring yoga, seeking mental wellness support, or building healthy habits, we're here to guide you every step of the way.</p>
-          </div>
           <div className="footer-meta">
             <p>© {new Date().getFullYear()} June Flint. All rights reserved.</p>
-            <p className="footer-note">Designed with care for Gen Z wellness</p>
           </div>
         </div>
       </div>
