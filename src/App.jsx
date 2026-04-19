@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import TrustStrip from './components/TrustStrip';
 import YogaSlider from './components/YogaSlider';
 import YogaCollage from './components/YogaCollage';
+import HotYoga from './components/HotYoga';
 import WhatWeHelpWith from './components/WhatWeHelpWith';
 import ServicesGrid from './components/ServicesGrid';
 import MoodChecker from './components/MoodChecker';
@@ -13,17 +15,17 @@ import BlogPreview from './components/BlogPreview';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 
-export default function App() {
+// Home Page Component
+function HomePage({ theme, onThemeToggle }) {
+  const navigate = useNavigate();
+
   const handleExplore = () => {
-    const element = document.getElementById('hot-yoga');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    navigate('/hot-yoga');
   };
 
   return (
     <div className="app-root">
-      <Header />
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
       <Hero onExplore={handleExplore} />
       <TrustStrip />
       <YogaSlider />
@@ -37,5 +39,43 @@ export default function App() {
       <FinalCTA />
       <Footer />
     </div>
+  );
+}
+
+// Hot Yoga Page Component
+function HotYogaPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <HotYoga />
+      <Footer />
+    </div>
+  );
+}
+
+export default function App() {
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const handleThemeToggle = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  return (
+    <Router>
+      <Routes>
+        <Route 
+          path="/" 
+          element={<HomePage theme={theme} onThemeToggle={handleThemeToggle} />} 
+        />
+        <Route 
+          path="/hot-yoga" 
+          element={<HotYogaPage theme={theme} onThemeToggle={handleThemeToggle} />} 
+        />
+      </Routes>
+    </Router>
   );
 }
