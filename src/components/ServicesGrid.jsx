@@ -1,4 +1,5 @@
 import React from 'react';
+import { FadeInFromLeft, StaggerContainer, StaggerItem } from './animations';
 
 const services = [
   { 
@@ -44,25 +45,30 @@ export default function ServicesGrid() {
     <section className="services-section" id="talk-space">
       <div className="container">
         <div className="section-header">
-          <h2 className="section-title">Core Services</h2>
-          <p className="section-subtitle">Your complete toolkit for healing, growth, and self-discovery</p>
+          <FadeInFromLeft>
+            <h2 className="section-title">Core Services</h2>
+          </FadeInFromLeft>
+          <FadeInFromLeft delay={0.1}>
+            <p className="section-subtitle">Your complete toolkit for healing, growth, and self-discovery</p>
+          </FadeInFromLeft>
         </div>
 
-        <div className="services-list">
+        <StaggerContainer className="services-list" staggerDelay={0.1}>
           {services.map((service, index) => (
-            <div 
-              key={service.id}
-              className="service-item"
-              style={{ '--accent-color': service.color }}
-            >
-              <div className="service-circle"></div>
-              <div className="service-text">
-                <h3 className="service-title">{service.title}</h3>
-                <p className="service-desc">{service.desc}</p>
+            <StaggerItem key={service.id}>
+              <div 
+                className="service-item"
+                style={{ '--accent-color': service.color }}
+              >
+                <div className="service-circle"></div>
+                <div className="service-text">
+                  <h3 className="service-title">{service.title}</h3>
+                  <p className="service-desc">{service.desc}</p>
+                </div>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

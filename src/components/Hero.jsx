@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Starfield from './Starfield';
+import { FadeLeft, FadeRight, FloatingBlob } from './animations';
 
 export default function Hero({ onExplore }) {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -38,11 +39,11 @@ export default function Hero({ onExplore }) {
       <Starfield />
 
       {/* Glowing gradient orb */}
-      <div className="glowing-orb">
+      <FloatingBlob className="glowing-orb">
         <div className="orb orb-1"></div>
         <div className="orb orb-2"></div>
         <div className="orb orb-3"></div>
-      </div>
+      </FloatingBlob>
 
       {/* Breathing circles animation */}
       <div className="breathing-circles">
@@ -59,7 +60,7 @@ export default function Hero({ onExplore }) {
       </div>
 
       {/* Floating yoga girl illustration */}
-      <div className="floating-yoga">
+      <FadeRight delay={0.2} className="floating-yoga">
         <div className="yoga-girl">
           <svg viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
             {/* Yoga pose silhouette */}
@@ -85,23 +86,23 @@ export default function Hero({ onExplore }) {
         <div className="floating-particle p1"></div>
         <div className="floating-particle p2"></div>
         <div className="floating-particle p3"></div>
-      </div>
+      </FadeRight>
 
-      <div className="hero-content-container">
-        <p className="hero-subtitle">A safe Gen Z wellness space</p>
+      <FadeLeft delay={0} className="hero-content-container">
+        <p className="hero-subtitle">Transform Your Body & Mind</p>
         <h1 className="hero-main-title">
-          Talk. Heal. Breathe.<br/>You're not alone.
+          Hot Yoga at June Flint<br/>Discover Your Best Self
         </h1>
         <p className="hero-description">
-          A safe Gen Z wellness space for stress relief, hot yoga, emotional support, and real conversations.
+          Experience the transformative power of hot yoga in our heated studio. Build flexibility, reduce stress, and join a supportive community.
         </p>
         <div className="hero-ctas">
-          <button className="btn-primary">Start Talking</button>
-          <button className="btn-secondary" onClick={onExplore}>
-            Explore Healing
+          <button className="btn btn-primary">Book Your First Class</button>
+          <button className="btn btn-secondary" onClick={onExplore}>
+            Explore Classes
           </button>
         </div>
-      </div>
+      </FadeLeft>
     </section>
   );
 }

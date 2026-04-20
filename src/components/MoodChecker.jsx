@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FadeUp, FadeInFromLeft, StaggerContainer, StaggerItem, HoverLift } from './animations';
 
 const moodData = {
   'Sad': {
@@ -59,23 +60,32 @@ export default function MoodChecker() {
     <section className="mood-checker-section">
       <div className="mood-checker-container">
         <div className="mood-checker-header">
-          <span className="mood-checker-label">Emotional Wellness Assessment</span>
-          <h2 className="mood-checker-title">How Are You Feeling Today?</h2>
-          <p className="mood-checker-subtitle">Select your current emotional state to receive personalized guidance and support tailored to your needs.</p>
+          <FadeInFromLeft>
+            <span className="mood-checker-label">Emotional Wellness Assessment</span>
+          </FadeInFromLeft>
+          <FadeInFromLeft delay={0.1}>
+            <h2 className="mood-checker-title">How Are You Feeling Today?</h2>
+          </FadeInFromLeft>
+          <FadeInFromLeft delay={0.2}>
+            <p className="mood-checker-subtitle">Select your current emotional state to receive personalized guidance and support tailored to your needs.</p>
+          </FadeInFromLeft>
         </div>
 
-        <div className="mood-grid">
+        <StaggerContainer className="mood-grid" staggerDelay={0.1}>
           {moods.map((mood) => (
-            <button
-              key={mood.key}
-              className={`mood-option ${selectedMood === mood.key ? 'selected' : ''}`}
-              onClick={() => handleMoodSelect(mood.key)}
-            >
-              <span className="mood-option-label">{mood.label}</span>
-              <span className="mood-option-desc">{mood.description}</span>
-            </button>
+            <StaggerItem key={mood.key}>
+              <HoverLift>
+                <button
+                  className={`mood-option ${selectedMood === mood.key ? 'selected' : ''}`}
+                  onClick={() => handleMoodSelect(mood.key)}
+                >
+                  <span className="mood-option-label">{mood.label}</span>
+                  <span className="mood-option-desc">{mood.description}</span>
+                </button>
+              </HoverLift>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {showContent && selectedMood && (
           <div className="mood-results">

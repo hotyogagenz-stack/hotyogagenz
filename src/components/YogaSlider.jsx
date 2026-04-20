@@ -1,4 +1,5 @@
 import React from 'react';
+import { FadeInFromLeft, FadeRight } from './animations';
 
 const yogaImages = [
   {
@@ -40,23 +41,33 @@ export default function YogaSlider() {
           </div>
 
           {/* Content Panel on Right */}
-          <div className="about-panel">
-            <div className="eyebrow">HOT YOGA</div>
-            <h2 className="about-title">Heat Your Body. Calm Your Mind.</h2>
-            <p className="about-copy">
-              Our hot yoga sessions blend ancient Indian wisdom with modern wellness practices.
-              Through mindful movement in elevated temperatures, we help you unlock your natural
-              potential — finding calm, building community, and embracing growth.
-            </p>
-            <div className="about-features">
-              <div className="feature-item">Mindful Movement</div>
-              <div className="feature-item">Strength & Flexibility</div>
-              <div className="feature-item">Mental Clarity</div>
-            </div>
-            <div className="about-cta">
-              <button className="btn-primary">Book Your Session</button>
-            </div>
-          </div>
+          <FadeInFromLeft className="about-panel">
+            <FadeInFromLeft>
+              <div className="eyebrow">HOT YOGA</div>
+            </FadeInFromLeft>
+            <FadeInFromLeft delay={0.1}>
+              <h2 className="about-title">Heat Your Body. Calm Your Mind.</h2>
+            </FadeInFromLeft>
+            <FadeInFromLeft delay={0.2}>
+              <p className="about-copy">
+                Our hot yoga sessions blend ancient Indian wisdom with modern wellness practices.
+                Through mindful movement in elevated temperatures, we help you unlock your natural
+                potential — finding calm, building community, and embracing growth.
+              </p>
+            </FadeInFromLeft>
+            <FadeInFromLeft delay={0.3}>
+              <div className="about-features">
+                <div className="feature-item">Mindful Movement</div>
+                <div className="feature-item">Strength & Flexibility</div>
+                <div className="feature-item">Mental Clarity</div>
+              </div>
+            </FadeInFromLeft>
+            <FadeInFromLeft delay={0.4}>
+              <div className="about-cta">
+                <button className="btn btn-primary">Book Your Session</button>
+              </div>
+            </FadeInFromLeft>
+          </FadeInFromLeft>
         </div>
       </div>
     </section>

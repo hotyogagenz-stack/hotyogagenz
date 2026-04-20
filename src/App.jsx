@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import TrustStrip from './components/TrustStrip';
@@ -14,6 +14,8 @@ import Testimonials from './components/Testimonials';
 import BlogPreview from './components/BlogPreview';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
+import TalkSpace from './components/TalkSpace';
+import Healing from './components/Healing';
 
 // Home Page Component
 function HomePage({ theme, onThemeToggle }) {
@@ -53,6 +55,28 @@ function HotYogaPage({ theme, onThemeToggle }) {
   );
 }
 
+// Talk Space Page Component
+function TalkSpacePage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <TalkSpace />
+      <Footer />
+    </div>
+  );
+}
+
+// Healing Page Component
+function HealingPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Healing />
+      <Footer />
+    </div>
+  );
+}
+
 export default function App() {
   const [theme, setTheme] = useState('light');
 
@@ -74,6 +98,14 @@ export default function App() {
         <Route 
           path="/hot-yoga" 
           element={<HotYogaPage theme={theme} onThemeToggle={handleThemeToggle} />} 
+        />
+        <Route 
+          path="/talk-space" 
+          element={<TalkSpacePage theme={theme} onThemeToggle={handleThemeToggle} />} 
+        />
+        <Route 
+          path="/healing" 
+          element={<HealingPage theme={theme} onThemeToggle={handleThemeToggle} />} 
         />
       </Routes>
     </Router>
