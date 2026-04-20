@@ -2665,6 +2665,7 @@ h2, h3 {
     transparent 100%
   );
   transform: translateX(-50%);
+  z-index: 1; /* keep the line behind the icons */
 }
 
 /* Feature Items - Alternating Layout - Grid Based */
@@ -2689,16 +2690,16 @@ h2, h3 {
   .feature-dot {
     position: static;
     transform: none;
-    width: 56px;
-    height: 56px;
+  width: 64px;
+  height: 64px;
     border-radius: 50%;
     background: rgba(124,58,237,0.10);
     border: 1.5px solid rgba(124,58,237,0.40);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto;
-    z-index: 2;
+  margin: 0 auto;
+  z-index: 3; /* float above the vertical line */
   }
 
   .feature-dot svg {
@@ -2712,6 +2713,7 @@ h2, h3 {
     text-align: right; 
     grid-column: 1; 
     align-items: flex-end;
+    padding-right: 40px; /* space from center */
   }
   .feature-item.left .feature-dot     { grid-column: 2; }
 
@@ -2721,6 +2723,7 @@ h2, h3 {
     text-align: left; 
     grid-column: 3; 
     align-items: flex-start;
+    padding-left: 40px; /* space from center */
   }
 
   /* Feature Content */
@@ -2731,7 +2734,7 @@ h2, h3 {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-width: 380px;
+  max-width: 420px;
   }
 
   .feature-title {
@@ -2769,6 +2772,14 @@ h2, h3 {
     transform: translateX(-50%);
     width: 50px;
     height: 50px;
+  }
+
+  /* Move center line to align with the stacked icons on small screens */
+  .features-timeline::before {
+    left: 30px;
+    transform: none;
+    top: 0;
+    bottom: 0;
   }
   
   .feature-content {
