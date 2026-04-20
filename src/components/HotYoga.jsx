@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FadeUp, FadeLeft, FadeRight, FadeInFromLeft, StaggerContainer, StaggerItem, HoverLift } from './animations';
 
 // ProcessedPoster: loads the poster image, removes near-white background pixels
 // using an offscreen canvas, and renders a transparent PNG data URL.
@@ -195,46 +196,56 @@ export default function HotYoga() {
         <div className="container">
           <div className="hero-content-wrapper">
             <div className="hero-text">
-              <span className="hero-badge">🔥 Hot Yoga Program</span>
-              <h1 className="hero-title">
-                Transform Through
-                <span className="title-gradient"> Heat & Movement</span>
-              </h1>
-              <p className="hero-description">
-                Experience the power of hot yoga at June Flint. Our signature sessions 
-                combine controlled heat with traditional yoga postures to accelerate 
-                flexibility, build strength, and cleanse your body and mind.
-              </p>
-              <div className="hero-buttons">
-                <button className="btn-primary btn-lg">
-                  Book Your First Class
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="btn-arrow">
-                    <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-                <button className="btn-secondary btn-lg">
-                  View Pricing
-                </button>
-              </div>
-              <div className="hero-stats">
-                <div className="stat-item">
-                  <span className="stat-value">4.9</span>
-                  <span className="stat-label">★ 500+ Reviews</span>
+              <FadeUp>
+                <span className="hero-badge">Hot Yoga Program</span>
+              </FadeUp>
+              <FadeUp delay={0.1}>
+                <h1 className="hero-title">
+                  Transform Through
+                  <span className="title-gradient"> Heat & Movement</span>
+                </h1>
+              </FadeUp>
+              <FadeUp delay={0.2}>
+                <p className="hero-description">
+                  Experience the power of hot yoga at June Flint. Our signature sessions 
+                  combine controlled heat with traditional yoga postures to accelerate 
+                  flexibility, build strength, and cleanse your body and mind.
+                </p>
+              </FadeUp>
+              <FadeUp delay={0.3}>
+                <div className="hero-buttons">
+                  <button className="btn-primary btn-lg">
+                    Book Your First Class
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="btn-arrow">
+                      <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  <button className="btn-secondary btn-lg">
+                    View Pricing
+                  </button>
                 </div>
-                <div className="stat-divider"></div>
-                <div className="stat-item">
-                  <span className="stat-value">98%</span>
-                  <span className="stat-label">Return Rate</span>
+              </FadeUp>
+              <FadeUp delay={0.4}>
+                <div className="hero-stats">
+                  <div className="stat-item">
+                    <span className="stat-value">4.9</span>
+                    <span className="stat-label">★ 500+ Reviews</span>
+                  </div>
+                  <div className="stat-divider"></div>
+                  <div className="stat-item">
+                    <span className="stat-value">98%</span>
+                    <span className="stat-label">Return Rate</span>
+                  </div>
                 </div>
-              </div>
+              </FadeUp>
             </div>
-            <div className="hero-visual">
+            <FadeRight delay={0.2} className="hero-visual">
               {/* Poster image: process at runtime to remove near-white background */}
               {
                 /* client-side background removal via canvas */
               }
               <ProcessedPoster />
-            </div>
+            </FadeRight>
           </div>
         </div>
       </div>
@@ -255,39 +266,44 @@ export default function HotYoga() {
 
       <div className="container">
         {/* Section Header */}
-        <div className="hot-yoga-header">
-          <span className="section-eyebrow">Why Choose Us</span>
-          <h2 className="section-title">The June Flint Difference</h2>
-          <p className="section-description">
-            We've crafted the perfect environment for your hot yoga practice, 
-            combining luxury amenities with expert guidance for transformative results.
-          </p>
-        </div>
+        <FadeInFromLeft>
+          <div className="hot-yoga-header">
+            <span className="section-eyebrow">Why Choose Us</span>
+            <h2 className="section-title">The June Flint Difference</h2>
+            <p className="section-description">
+              We've crafted the perfect environment for your hot yoga practice, 
+              combining luxury amenities with expert guidance for transformative results.
+            </p>
+          </div>
+        </FadeInFromLeft>
 
         {/* Features Grid */}
-        <div className="hot-yoga-features">
+        <StaggerContainer className="hot-yoga-features">
           {hotYogaFeatures.map((feature, index) => (
-            <div className="feature-card" key={index}>
+            <StaggerItem key={index}>
+              <HoverLift className="feature-card">
               <div className="feature-icon-wrapper">
                 <div className="feature-icon">{feature.icon}</div>
               </div>
               <h3 className="feature-title">{feature.title}</h3>
               <p className="feature-desc">{feature.desc}</p>
-            </div>
+            </HoverLift>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* Class Packages */}
-        <div className="packages-section">
-          <span className="section-eyebrow">Investment</span>
-          <h3 className="packages-title">Choose Your Plan</h3>
-          <p className="packages-subtitle">Flexible options for every practice level</p>
-          <div className="packages-grid">
-            {classPackages.map((pkg, index) => (
-              <div 
-                className={`package-card ${pkg.popular ? 'popular' : ''}`} 
-                key={index}
-              >
+        <FadeInFromLeft>
+          <div className="packages-section">
+            <span className="section-eyebrow">Investment</span>
+            <h3 className="packages-title">Choose Your Plan</h3>
+            <p className="packages-subtitle">Flexible options for every practice level</p>
+          </div>
+        </FadeInFromLeft>
+        <StaggerContainer className="packages-grid">
+          {classPackages.map((pkg, index) => (
+            <StaggerItem key={index}>
+              <HoverLift className={`package-card ${pkg.popular ? 'popular' : ''}`}>
                 {pkg.popular && <span className="popular-badge">Most Popular</span>}
                 <div className="package-header">
                   <h4 className="package-name">{pkg.name}</h4>
@@ -310,18 +326,22 @@ export default function HotYoga() {
                 <button className={`package-btn ${pkg.popular ? 'btn-primary' : 'btn-secondary'}`}>
                   {pkg.cta}
                 </button>
-              </div>
-            ))}
-          </div>
-        </div>
+              </HoverLift>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
 
         {/* Social Proof / Testimonials */}
-        <div className="testimonials-section">
-          <span className="section-eyebrow">Community Love</span>
-          <h3 className="testimonials-title">What Our Students Say</h3>
-          <div className="testimonials-grid">
-            {testimonials.map((testimonial, index) => (
-              <div className="testimonial-card" key={index}>
+        <FadeInFromLeft>
+          <div className="hot-yoga-testimonials-section">
+            <span className="section-eyebrow">Community Love</span>
+            <h3 className="testimonials-title">What Our Students Say</h3>
+          </div>
+        </FadeInFromLeft>
+        <StaggerContainer className="testimonials-grid">
+          {testimonials.map((testimonial, index) => (
+            <StaggerItem key={index}>
+              <HoverLift className="testimonial-card">
                 <div className="testimonial-rating">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <span key={i} className="star">★</span>
@@ -335,10 +355,10 @@ export default function HotYoga() {
                     <span className="author-role">{testimonial.role}</span>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              </HoverLift>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
 
         {/* CTA Section */}
         <div className="hot-yoga-cta">

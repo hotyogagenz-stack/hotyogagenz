@@ -1,4 +1,5 @@
 import React from 'react';
+import { FadeUp, FadeInFromLeft, StaggerContainer, StaggerItem, HoverLift } from './animations';
 
 const collagePhotos = [
   {
@@ -33,30 +34,37 @@ export default function YogaCollage() {
       <div className="collage-glow-bg"></div>
       <div className="container">
         <div className="collage-header">
-          <span className="collage-eyebrow">OUR COMMUNITY</span>
-          <h2 className="collage-title">Moments of Serenity</h2>
+          <FadeInFromLeft>
+            <span className="collage-eyebrow">OUR COMMUNITY</span>
+          </FadeInFromLeft>
+          <FadeInFromLeft delay={0.1}>
+            <h2 className="collage-title">Moments of Serenity</h2>
+          </FadeInFromLeft>
         </div>
         
-        <div className="photo-collage">
+        <StaggerContainer className="photo-collage" staggerDelay={0.15}>
           {collagePhotos.map((photo, index) => (
-            <div 
-              key={photo.id} 
-              className="photo-card"
-              style={{
-                '--rotate': photo.rotate,
-                '--z-index': photo.zIndex,
-                animationDelay: `${index * 0.15}s`
-              }}
-            >
-              <div className="photo-wrapper">
-                <img src={photo.url} alt={photo.alt} />
-                <div className="overlay">
-                  <span className="photo-label">{photo.label}</span>
+            <StaggerItem key={photo.id}>
+              <HoverLift>
+                <div 
+                  className="photo-card"
+                  style={{
+                    '--rotate': photo.rotate,
+                    '--z-index': photo.zIndex,
+                    animationDelay: `${index * 0.15}s`
+                  }}
+                >
+                  <div className="photo-wrapper">
+                    <img src={photo.url} alt={photo.alt} />
+                    <div className="overlay">
+                      <span className="photo-label">{photo.label}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </HoverLift>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

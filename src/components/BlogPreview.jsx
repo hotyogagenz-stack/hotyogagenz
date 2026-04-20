@@ -1,4 +1,5 @@
 import React from 'react';
+import { FadeUp, FadeInFromLeft, StaggerContainer, StaggerItem, HoverLift } from './animations';
 
 const blogs = [
   {
@@ -35,33 +36,39 @@ export default function BlogPreview() {
     <section className="blog-preview-section" id="blog">
       <div className="container">
         <div className="section-header">
-          <h2 className="section-title">Latest Articles</h2>
-          <p className="section-subtitle">Insights and guidance for your wellness journey</p>
+          <FadeInFromLeft>
+            <h2 className="section-title">Latest Articles</h2>
+          </FadeInFromLeft>
+          <FadeInFromLeft delay={0.1}>
+            <p className="section-subtitle">Insights and guidance for your wellness journey</p>
+          </FadeInFromLeft>
         </div>
 
-        <div className="blog-grid">
+        <StaggerContainer className="blog-grid">
           {blogs.map((blog) => (
-            <article key={blog.id} className="blog-card glass-card">
-              <div className="blog-image">
-                <img src={blog.image} alt={blog.title} />
-              </div>
-              <div className="blog-content">
-                <div className="blog-meta">
-                  <span className="blog-date">{blog.date}</span>
-                  <span className="blog-read-time">{blog.readTime}</span>
+            <StaggerItem key={blog.id}>
+              <HoverLift className="blog-card glass-card">
+                <div className="blog-image">
+                  <img src={blog.image} alt={blog.title} />
                 </div>
-                <h3 className="blog-title">{blog.title}</h3>
-                <p className="blog-excerpt">{blog.excerpt}</p>
-                <button className="btn-read-more">
-                  <span>Read More</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </button>
-              </div>
-            </article>
+                <div className="blog-content">
+                  <div className="blog-meta">
+                    <span className="blog-date">{blog.date}</span>
+                    <span className="blog-read-time">{blog.readTime}</span>
+                  </div>
+                  <h3 className="blog-title">{blog.title}</h3>
+                  <p className="blog-excerpt">{blog.excerpt}</p>
+                  <button className="btn-read-more">
+                    <span>Read More</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </button>
+                </div>
+              </HoverLift>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         <div className="cta-container">
           <button className="btn-view-all">

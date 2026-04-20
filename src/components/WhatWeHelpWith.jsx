@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FadeUp, FadeInFromLeft, StaggerContainer, StaggerItem, HoverLift } from './animations';
 
 const helpTopics = [
   {
@@ -71,28 +72,38 @@ export default function WhatWeHelpWith() {
     <section className="what-we-help-with-section">
       <div className="container">
         <div className="section-header">
-          <div className="section-eyebrow">
-            <span className="eyebrow-line"></span>
-            <span className="eyebrow-text">Support</span>
-            <span className="eyebrow-line"></span>
-          </div>
-          <h2 className="section-title">What We Help With</h2>
-          <p className="section-subtitle">
-            Whatever you're carrying, don't carry it alone. 
-            Our community is here to walk alongside you.
-          </p>
+          <FadeInFromLeft>
+            <div className="section-eyebrow">
+              <span className="eyebrow-line"></span>
+              <span className="eyebrow-text">Support</span>
+              <span className="eyebrow-line"></span>
+            </div>
+          </FadeInFromLeft>
+          <FadeInFromLeft delay={0.1}>
+            <h2 className="section-title">What We Help With</h2>
+          </FadeInFromLeft>
+          <FadeInFromLeft delay={0.2}>
+            <p className="section-subtitle">
+              Whatever you're carrying, don't carry it alone. 
+              Our community is here to walk alongside you.
+            </p>
+          </FadeInFromLeft>
         </div>
         
-        <div className="help-grid">
+        <StaggerContainer className="help-grid">
           {helpTopics.map((topic, index) => (
-            <HelpCard
-              key={index}
-              topic={topic}
-              isOpen={openIndex === index}
-              onClick={() => handleItemClick(index)}
-            />
+            <StaggerItem key={index}>
+              <HoverLift>
+                <HelpCard
+                  key={index}
+                  topic={topic}
+                  isOpen={openIndex === index}
+                  onClick={() => handleItemClick(index)}
+                />
+              </HoverLift>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         <div className="cta-row">
           <button className="cta-primary">
