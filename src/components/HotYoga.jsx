@@ -360,22 +360,31 @@ export default function HotYoga() {
           ))}
         </StaggerContainer>
 
-        {/* CTA Section */}
-        <div className="hot-yoga-cta">
-          <div className="cta-glow"></div>
-          <div className="cta-content">
+        {/* CTA Section - Open and Airy */}
+        <div className="hot-yoga-cta-container">
+          <div className="cta-content-wrapper">
             <h3 className="cta-title">Begin Your Hot Yoga Journey</h3>
             <p className="cta-desc">
-              First class free for new students. Experience the transformative power 
-              of hot yoga and discover a new version of yourself.
+              Experience the transformative power of hot yoga and discover a new version of yourself. 60-minute heated session awaits you.
             </p>
-            <button className="cta-btn btn-primary btn-lg">
-              Book Your First Class
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="btn-arrow">
-                <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <p className="cta-note">No commitment required • 60-minute session</p>
+            <div className="cta-buttons">
+              <button className="cta-btn btn-primary btn-lg">
+                Book Your First Class <span className="cta-free">FREE</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="btn-arrow">
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <button className="cta-btn-secondary btn-lg">
+                View Class Schedule
+              </button>
+            </div>
+            <p className="cta-features">
+              <span className="feature-item"><svg className="check-icon" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>No commitment required</span>
+              <span className="feature-divider">•</span>
+              <span className="feature-item">60-minute session</span>
+              <span className="feature-divider">•</span>
+              <span className="feature-item">All levels welcome</span>
+            </p>
           </div>
         </div>
       </div>

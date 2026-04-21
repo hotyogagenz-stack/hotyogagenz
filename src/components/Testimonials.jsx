@@ -1,5 +1,7 @@
 import React from 'react';
 import { FadeUp, FadeInFromLeft, StaggerContainer, StaggerItem, HoverLift } from './animations';
+import Tilt3DCard from './Tilt3DCard';
+import GlassCard from './GlassCard';
 
 const testimonials = [
   {
@@ -38,16 +40,18 @@ export default function Testimonials() {
         <StaggerContainer className="testimonials-grid">
           {testimonials.map((testimonial, index) => (
             <StaggerItem key={index}>
-              <HoverLift className="testimonial-card">
-                <div className="testimonial-card-inner">
-                  <span className="testimonial-avatar">{testimonial.avatar}</span>
-                  <blockquote className="testimonial-quote">{testimonial.quote}</blockquote>
-                  <div className="testimonial-author-info">
-                    <cite className="testimonial-author">{testimonial.author}</cite>
-                    <span className="testimonial-role">{testimonial.role}</span>
+              <Tilt3DCard maxRotation={6} enableGlow={true} glowIntensity={0.4}>
+                <GlassCard className="testimonial-card glass-card" hover>
+                  <div className="testimonial-card-inner">
+                    <span className="testimonial-avatar">{testimonial.avatar}</span>
+                    <blockquote className="testimonial-quote">{testimonial.quote}</blockquote>
+                    <div className="testimonial-author-info">
+                      <cite className="testimonial-author">{testimonial.author}</cite>
+                      <span className="testimonial-role">{testimonial.role}</span>
+                    </div>
                   </div>
-                </div>
-              </HoverLift>
+                </GlassCard>
+              </Tilt3DCard>
             </StaggerItem>
           ))}
         </StaggerContainer>

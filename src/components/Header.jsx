@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export default function Header({ theme, onThemeToggle }){
+export default function Header({ theme, onThemeToggle }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -19,19 +19,21 @@ export default function Header({ theme, onThemeToggle }){
     { to: '/hot-yoga', label: 'Hot Yoga' },
     { to: '/talk-space', label: 'Talk Space' },
     { to: '/healing', label: 'Healing' },
-    { href: '#imotti-guide', label: 'Imotti Guide' },
-    { href: '#blog', label: 'Blog' }
+    { to: '/blog', label: 'Blog' },
+    { to: '/imotti-guide', label: 'Imotti Guide' },
+    { to: '/login', label: 'Login' },
+    { to: '/join', label: 'Join' }
   ];
 
   return (
-    <motion.header 
+    <motion.header
       className={`site-header transparent-header ${mobileMenuOpen ? 'menu-open' : ''}`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="container">
-        <motion.div 
+        <motion.div
           className="logo"
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.3 }}
@@ -54,7 +56,7 @@ export default function Header({ theme, onThemeToggle }){
 
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.nav 
+            <motion.nav
               className={`nav mobile-open`}
               initial={{ opacity: 0, x: '100%' }}
               animate={{ opacity: 1, x: 0 }}
@@ -75,13 +77,6 @@ export default function Header({ theme, onThemeToggle }){
                   )}
                 </motion.div>
               ))}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navItems.length * 0.05 }}
-              >
-                <a href="#login" className="login-btn" onClick={closeMobileMenu}>Login / Join</a>
-              </motion.div>
               <ThemeToggle theme={theme} onToggle={onThemeToggle} />
             </motion.nav>
           )}
@@ -102,13 +97,6 @@ export default function Header({ theme, onThemeToggle }){
               )}
             </motion.div>
           ))}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: navItems.length * 0.05 }}
-          >
-            <a href="#login" className="login-btn">Login / Join</a>
-          </motion.div>
           <ThemeToggle theme={theme} onToggle={onThemeToggle} />
         </nav>
       </div>

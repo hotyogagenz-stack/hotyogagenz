@@ -1,5 +1,6 @@
 import React from 'react';
 import { FadeInFromLeft, StaggerContainer, StaggerItem } from './animations';
+import GlassCard from './GlassCard';
 
 const services = [
   { 
@@ -56,16 +57,18 @@ export default function ServicesGrid() {
         <StaggerContainer className="services-list" staggerDelay={0.1}>
           {services.map((service, index) => (
             <StaggerItem key={service.id}>
-              <div 
-                className="service-item"
-                style={{ '--accent-color': service.color }}
-              >
-                <div className="service-circle"></div>
-                <div className="service-text">
-                  <h3 className="service-title">{service.title}</h3>
-                  <p className="service-desc">{service.desc}</p>
+              <GlassCard className="service-item glass-card" hover blur={8}>
+                <div 
+                  className="service-item-inner"
+                  style={{ '--accent-color': service.color }}
+                >
+                  <div className="service-circle"></div>
+                  <div className="service-text">
+                    <h3 className="service-title">{service.title}</h3>
+                    <p className="service-desc">{service.desc}</p>
+                  </div>
                 </div>
-              </div>
+              </GlassCard>
             </StaggerItem>
           ))}
         </StaggerContainer>
