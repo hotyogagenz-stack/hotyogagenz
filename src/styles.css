@@ -16397,22 +16397,3 @@ button:hover {
 [data-theme="light"] .hero-section::before {
   display: none;
 }
-
-/* Enhanced light mode background slides */
-[data-theme="light"] .hero-background .bg-slide {
-  opacity: 0;
-}
-
-[data-theme="light"] .hero-background .bg-slide.active {
-  opacity: 0;
-}
-
-/* Light mode starfield hidden */
-[data-theme="light"] .starfield-container {
-  display: none;
-}
-
-[data-theme="light"] .mouse-glow-orb {
-  display: none;
-}
-
