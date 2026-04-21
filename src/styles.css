@@ -5986,8 +5986,8 @@ button:hover {
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  margin-bottom: 60px;
+  gap: 40px;
+  margin-bottom: 80px;
 }
 
 /* Blog Card */
@@ -6061,20 +6061,21 @@ button:hover {
 
 /* Card Content */
 .blog-card-content {
-  padding: 24px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  min-height: 200px;
 }
 
 .blog-card-meta {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-  font-size: 0.8rem;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
   color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .blog-card-meta span {
@@ -6089,10 +6090,10 @@ button:hover {
 
 .blog-card-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  line-height: 1.35;
-  margin-bottom: 12px;
+  line-height: 1.3;
+  margin-bottom: 16px;
   color: var(--text-primary);
   transition: color 0.3s ease;
 }
@@ -6102,10 +6103,10 @@ button:hover {
 }
 
 .blog-card-excerpt {
-  font-size: 0.9rem;
-  line-height: 1.65;
+  font-size: 0.95rem;
+  line-height: 1.7;
   color: var(--text-secondary);
-  margin-bottom: 20px;
+  margin-bottom: 28px;
   flex-grow: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -6118,9 +6119,9 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 20px;
-  border-top: 1px solid var(--glass-border);
   margin-top: auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--glass-border);
 }
 
 .blog-author {
@@ -6162,16 +6163,16 @@ button:hover {
 .blog-card .btn-read-more {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
+  gap: 8px;
+  padding: 10px 20px;
   background: var(--purple-500);
   color: white;
   border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.8rem;
-  font-weight: 500;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .blog-card .btn-read-more:hover {
@@ -6270,8 +6271,8 @@ button:hover {
 .blog-bottom {
   display: flex;
   flex-direction: column;
-  gap: 50px;
-  padding-bottom: 64px; /* space from footer */
+  gap: 120px;
+  padding-bottom: 120px; /* space from footer */
 }
 
 .blog-view-all .btn-view-all {

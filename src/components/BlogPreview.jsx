@@ -109,24 +109,24 @@ export default function BlogPreview() {
                     
                       <h3 className="blog-card-title">{blog.title}</h3>
                       <p className="blog-card-excerpt">{blog.excerpt}</p>
-                    </div>
-                    
-                    <div className="blog-card-footer">
-                      <div className="blog-author">
-                        <div className="blog-author-avatar">
-                          {blog.author.charAt(0)}
+                      
+                      <div className="blog-card-footer">
+                        <div className="blog-author">
+                          <div className="blog-author-avatar">
+                            {blog.author.charAt(0)}
+                          </div>
+                          <div className="blog-author-info">
+                            <span className="blog-author-name">{blog.author}</span>
+                            <span className="blog-author-title">{blog.authorTitle}</span>
+                          </div>
                         </div>
-                        <div className="blog-author-info">
-                          <span className="blog-author-name">{blog.author}</span>
-                          <span className="blog-author-title">{blog.authorTitle}</span>
-                        </div>
+                        <button className="btn-read-more">
+                          <span>Read Article</span>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                          </svg>
+                        </button>
                       </div>
-                      <button className="btn-read-more">
-                        <span>Read Article</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                      </button>
                     </div>
                   </div>
                 </HoverLift>
