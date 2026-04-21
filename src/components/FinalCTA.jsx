@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 
 export default function FinalCTA() {
   const navigate = useNavigate();
-  
+
   return (
     <section className="final-cta-section">
       <div className="cta-glow-bg">
         <div className="glow-orb cta-orb-1"></div>
         <div className="glow-orb cta-orb-2"></div>
       </div>
-      
+
       <div className="container">
         <div className="cta-content">
           <motion.div
@@ -23,7 +23,7 @@ export default function FinalCTA() {
           >
             <span className="cta-badge-text">First Class FREE</span>
           </motion.div>
-          
+
           <motion.h2
             className="cta-title"
             initial={{ opacity: 0, y: 20 }}
@@ -33,7 +33,7 @@ export default function FinalCTA() {
           >
             Begin Your <span className="cta-title-accent">Hot Yoga Journey</span>
           </motion.h2>
-          
+
           <motion.p
             className="cta-subtitle"
             initial={{ opacity: 0, y: 20 }}
@@ -44,7 +44,7 @@ export default function FinalCTA() {
             Experience the transformative power of hot yoga and discover a new version of yourself.
             <span className="cta-highlight"> 60-minute heated session awaits you.</span>
           </motion.p>
-          
+
           <motion.div
             className="cta-buttons"
             initial={{ opacity: 0, y: 20 }}
@@ -57,10 +57,10 @@ export default function FinalCTA() {
               <span className="btn-badge">FREE</span>
             </button>
             <button className="btn-secondary btn-cta" onClick={() => navigate('/hot-yoga')}>
-              View Class Schedule 
+              View Class Schedule
             </button>
           </motion.div>
-          
+
           <motion.p
             className="cta-note"
             initial={{ opacity: 0 }}

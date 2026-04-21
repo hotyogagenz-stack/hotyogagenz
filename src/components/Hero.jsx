@@ -1,6 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Starfield from './Starfield';
+import FloatingCrystals from './FloatingCrystals';
 import { FadeLeft, FadeRight, FloatingBlob } from './animations';
+import { ParallaxContainer, ParallaxLayer } from './ScrollParallax';
+
+// Mouse Following Glow Orb Component
+function MouseGlowOrb() {
+  const orbRef = useRef(null);
+  const targetRef = useRef({ x: 0, y: 0 });
+  const currentRef = useRef({ x: 0, y: 0 });
+  
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      targetRef.current = { x: e.clientX, y: e.clientY };
+    };
+    
+    const animate = () => {
+      // Smooth follow with lerp
+      const dx = targetRef.current.x - currentRef.current.x;
+      const dy = targetRef.current.y - currentRef.current.y;
+      
+      currentRef.current.x += dx * 0.08;
+      currentRef.current.y += dy * 0.08;
+      
+      if (orbRef.current) {
+        orbRef.current.style.transform = `translate(${currentRef.current.x}px, ${currentRef.current.y}px)`;
+      }
+      
+      requestAnimationFrame(animate);
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    const animationId = requestAnimationFrame(animate);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+  
+  return (
+    <div 
+      ref={orbRef} 
+      className="mouse-glow-orb"
+      style={{
+        position: 'fixed',
+        pointerEvents: 'none',
+        zIndex: 100,
+        left: 0,
+        top: 0,
+      }}
+    >
+      <div className="orb-glow inner"></div>
+      <div className="orb-glow middle"></div>
+      <div className="orb-glow outer"></div>
+    </div>
+  );
+}
 
 export default function Hero({ onExplore }) {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -24,40 +80,52 @@ export default function Hero({ onExplore }) {
 
   return (
     <section className="hero-section full-screen" id="home">
-      
-      {/* Background slides */}
-      <div className="hero-background">
-        <div className={`bg-slide s1 ${activeSlide === 0 ? 'active' : ''}`}></div>
-        <div className={`bg-slide s2 ${activeSlide === 1 ? 'active' : ''}`}></div>
-        <div className={`bg-slide s3 ${activeSlide === 2 ? 'active' : ''}`}></div>
-        <div className={`bg-slide s4 ${activeSlide === 3 ? 'active' : ''}`}></div>
-        <div className={`bg-slide s5 ${activeSlide === 4 ? 'active' : ''}`}></div>
-        <div className={`bg-slide s6 ${activeSlide === 5 ? 'active' : ''}`}></div>
-      </div>
+      <MouseGlowOrb />
+      <ParallaxContainer style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+        {/* Floating Crystals for Light Mode */}
+        <FloatingCrystals />
+        
+        {/* Background slides */}
+        <div className="hero-background">
+          <div className={`bg-slide s1 ${activeSlide === 0 ? 'active' : ''}`}></div>
+          <div className={`bg-slide s2 ${activeSlide === 1 ? 'active' : ''}`}></div>
+          <div className={`bg-slide s3 ${activeSlide === 2 ? 'active' : ''}`}></div>
+          <div className={`bg-slide s4 ${activeSlide === 3 ? 'active' : ''}`}></div>
+          <div className={`bg-slide s5 ${activeSlide === 4 ? 'active' : ''}`}></div>
+          <div className={`bg-slide s6 ${activeSlide === 5 ? 'active' : ''}`}></div>
+        </div>
 
-      {/* Starfield component for starry background effect */}
-      <Starfield />
+        {/* Starfield component for starry background effect */}
+        <Starfield />
 
-      {/* Glowing gradient orb */}
-      <FloatingBlob className="glowing-orb">
-        <div className="orb orb-1"></div>
-        <div className="orb orb-2"></div>
-        <div className="orb orb-3"></div>
-      </FloatingBlob>
+        {/* Parallax background decorations - slower layer */}
+        <ParallaxLayer speed={0.3} direction="up" className="parallax-bg-layer">
+          {/* Glowing gradient orb */}
+          <FloatingBlob className="glowing-orb">
+            <div className="orb orb-1"></div>
+            <div className="orb orb-2"></div>
+            <div className="orb orb-3"></div>
+          </FloatingBlob>
+        </ParallaxLayer>
 
-      {/* Breathing circles animation */}
-      <div className="breathing-circles">
-        <div className="breath-circle" style={{ transform: `scale(${breathScale})` }}></div>
-        <div className="breath-circle delay-1" style={{ transform: `scale(${breathScale})` }}></div>
-        <div className="breath-circle delay-2" style={{ transform: `scale(${breathScale})` }}></div>
-      </div>
+        {/* Breathing circles - medium parallax */}
+        <ParallaxLayer speed={0.2} direction="up" className="parallax-breath-layer">
+          <div className="breathing-circles">
+            <div className="breath-circle" style={{ transform: `scale(${breathScale})` }}></div>
+            <div className="breath-circle delay-1" style={{ transform: `scale(${breathScale})` }}></div>
+            <div className="breath-circle delay-2" style={{ transform: `scale(${breathScale})` }}></div>
+          </div>
+        </ParallaxLayer>
 
-      {/* Calm animated waves */}
-      <div className="calm-waves">
-        <div className="wave wave-1"></div>
-        <div className="wave wave-2"></div>
-        <div className="wave wave-3"></div>
-      </div>
+        {/* Calm animated waves - fastest parallax */}
+        <ParallaxLayer speed={0.15} direction="up" className="parallax-waves-layer">
+          <div className="calm-waves">
+            <div className="wave wave-1"></div>
+            <div className="wave wave-2"></div>
+            <div className="wave wave-3"></div>
+          </div>
+        </ParallaxLayer>
+      </ParallaxContainer>
 
       {/* Floating yoga girl illustration */}
       <FadeRight delay={0.2} className="floating-yoga">

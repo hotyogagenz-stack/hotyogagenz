@@ -42,6 +42,19 @@ export const FadeRight = ({ children, delay = 0, className = '' }) => (
   </motion.div>
 );
 
+// FadeIn - Simple fade-in animation when scrolling into view
+export const FadeIn = ({ children, delay = 0, className = '' }) => (
+  <motion.div
+    className={className}
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    viewport={{ once: true, margin: '-50px' }}
+    transition={{ duration: 0.6, ease: EASE, delay }}
+  >
+    {children}
+  </motion.div>
+);
+
 // ScaleUp - Elements scale up on reveal
 export const ScaleUp = ({ children, delay = 0, className = '' }) => (
   <motion.div
@@ -124,6 +137,45 @@ export const HoverLift = ({ children, className = '' }) => (
       transition: { duration: 0.3, ease: EASE },
     }}
     whileTap={{ scale: 0.98 }}
+  >
+    {children}
+  </motion.div>
+);
+
+// ScaleIn - Elements scale in from center
+const EASE_OUT = [0.22, 1, 0.36, 1];
+export const ScaleIn = ({ children, delay = 0, className = '' }) => (
+  <motion.div
+    className={className}
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, ease: EASE_OUT, delay }}
+  >
+    {children}
+  </motion.div>
+);
+
+// SlideInFromRight - Elements slide in from right
+const EASE_OUT_2 = [0.22, 1, 0.36, 1];
+export const SlideInFromRight = ({ children, delay = 0, className = '' }) => (
+  <motion.div
+    className={className}
+    initial={{ opacity: 0, x: 60 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.6, ease: EASE_OUT_2, delay }}
+  >
+    {children}
+  </motion.div>
+);
+
+// ParallaxCard - Card with parallax scroll effect
+export const ParallaxCard = ({ children, className = '' }) => (
+  <motion.div
+    className={className}
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-50px' }}
+    transition={{ duration: 0.6, ease: EASE }}
   >
     {children}
   </motion.div>

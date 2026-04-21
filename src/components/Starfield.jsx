@@ -7,16 +7,16 @@ export default function Starfield() {
   // Generate star data with varying sizes and depths
   const stars = useMemo(() => {
     const starArray = [];
-    const numStars = 150;
+    const numStars = 300;
     
     for (let i = 0; i < numStars; i++) {
       starArray.push({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 1.5 + 0.5,
+        size: Math.random() * 3 + 1.5, // Bigger stars: 1.5-4.5px
         depth: Math.random() * 0.5 + 0.1, // 0.1 to 0.6 - affects parallax intensity
-        opacity: Math.random() * 0.3 + 0.7,
+        opacity: Math.random() * 0.3 + 0.85, // Brighter: 0.85-1.0
         twinkleSpeed: Math.random() * 2 + 1,
         twinkleDelay: Math.random() * 2,
       });
@@ -77,7 +77,7 @@ export default function Starfield() {
       ))}
       
       {/* Distant tiny stars (more numerous, creates depth) */}
-      {stars.slice(0, 50).map((star) => (
+      {stars.slice(0, 100).map((star) => (
         <div
           key={`tiny-${star.id}`}
           className="starfield-star tiny"

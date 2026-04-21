@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import CursorTrail from './components/CursorTrail';
 import TrustStrip from './components/TrustStrip';
 import YogaSlider from './components/YogaSlider';
 import YogaCollage from './components/YogaCollage';
 import HotYoga from './components/HotYoga';
 import WhatWeHelpWith from './components/WhatWeHelpWith';
 import ServicesGrid from './components/ServicesGrid';
-import MoodChecker from './components/MoodChecker';
+import ImottiGuide from './components/ImottiGuide';
 import WhyChooseUs from './components/WhyChooseUs';
 import Testimonials from './components/Testimonials';
 import BlogPreview from './components/BlogPreview';
@@ -16,6 +17,9 @@ import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import TalkSpace from './components/TalkSpace';
 import Healing from './components/Healing';
+import Blog from './components/Blog';
+import Login from './components/Login';
+import Join from './components/Join';
 
 // Home Page Component
 function HomePage({ theme, onThemeToggle }) {
@@ -34,11 +38,10 @@ function HomePage({ theme, onThemeToggle }) {
       <YogaCollage />
       <WhatWeHelpWith />
       <ServicesGrid />
-      <MoodChecker />
+      <ImottiGuide />
       <WhyChooseUs />
       <Testimonials />
       <BlogPreview />
-      <FinalCTA />
       <Footer />
     </div>
   );
@@ -77,8 +80,44 @@ function HealingPage({ theme, onThemeToggle }) {
   );
 }
 
+// Blog Page Component
+function BlogPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Blog theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Imotti Guide Page Component
+function ImottiGuidePage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <ImottiGuide isPage={true} />
+      <Footer />
+    </div>
+  );
+}
+
+// Login Page Component
+function LoginPage({ theme, onThemeToggle }) {
+  return (
+    <Login theme={theme} onThemeToggle={onThemeToggle} />
+  );
+}
+
+// Join Page Component
+function JoinPage({ theme, onThemeToggle }) {
+  return (
+    <Join theme={theme} onThemeToggle={onThemeToggle} />
+  );
+}
+
 export default function App() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -90,22 +129,39 @@ export default function App() {
 
   return (
     <Router>
+      <CursorTrail />
       <Routes>
-        <Route 
-          path="/" 
-          element={<HomePage theme={theme} onThemeToggle={handleThemeToggle} />} 
+        <Route
+          path="/"
+          element={<HomePage theme={theme} onThemeToggle={handleThemeToggle} />}
         />
-        <Route 
-          path="/hot-yoga" 
-          element={<HotYogaPage theme={theme} onThemeToggle={handleThemeToggle} />} 
+        <Route
+          path="/hot-yoga"
+          element={<HotYogaPage theme={theme} onThemeToggle={handleThemeToggle} />}
         />
-        <Route 
-          path="/talk-space" 
-          element={<TalkSpacePage theme={theme} onThemeToggle={handleThemeToggle} />} 
+        <Route
+          path="/talk-space"
+          element={<TalkSpacePage theme={theme} onThemeToggle={handleThemeToggle} />}
         />
-        <Route 
-          path="/healing" 
-          element={<HealingPage theme={theme} onThemeToggle={handleThemeToggle} />} 
+        <Route
+          path="/healing"
+          element={<HealingPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/blog"
+          element={<BlogPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/imotti-guide"
+          element={<ImottiGuidePage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/login"
+          element={<LoginPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/join"
+          element={<JoinPage theme={theme} onThemeToggle={handleThemeToggle} />}
         />
       </Routes>
     </Router>
