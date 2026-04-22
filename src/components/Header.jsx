@@ -21,6 +21,7 @@ export default function Header({ theme, onThemeToggle }) {
     { to: '/healing', label: 'Healing' },
     { to: '/blog', label: 'Blog' },
     { to: '/imotti-guide', label: 'Imotti Guide' },
+    { to: '/gallery', label: 'Gallery' },
     { to: '/login', label: 'Login' },
     { to: '/join', label: 'Join' }
   ];

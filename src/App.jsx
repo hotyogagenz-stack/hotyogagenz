@@ -20,6 +20,7 @@ import Healing from './components/Healing';
 import Blog from './components/Blog';
 import Login from './components/Login';
 import Join from './components/Join';
+import Gallery from './components/Gallery';
 
 // Home Page Component
 function HomePage({ theme, onThemeToggle }) {
@@ -116,6 +117,17 @@ function JoinPage({ theme, onThemeToggle }) {
   );
 }
 
+// Gallery Page Component
+function GalleryPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Gallery />
+      <Footer />
+    </div>
+  );
+}
+
 export default function App() {
   const [theme, setTheme] = useState('dark');
 
@@ -162,6 +174,10 @@ export default function App() {
         <Route
           path="/join"
           element={<JoinPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/gallery"
+          element={<GalleryPage theme={theme} onThemeToggle={handleThemeToggle} />}
         />
       </Routes>
     </Router>

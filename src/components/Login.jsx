@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
+import authBg from '../assets/auth-bg.png';
 
 export default function Login({ theme, onThemeToggle }) {
   const navigate = useNavigate();
@@ -19,7 +20,6 @@ export default function Login({ theme, onThemeToggle }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
     console.log('Login attempt:', formData);
   };
 
@@ -29,18 +29,18 @@ export default function Login({ theme, onThemeToggle }) {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
+        delayChildren: 0.1
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
+        duration: 0.8,
         ease: [0.22, 1, 0.36, 1]
       }
     }
@@ -48,16 +48,26 @@ export default function Login({ theme, onThemeToggle }) {
 
   return (
     <div className={`auth-page ${theme}`}>
-  {/* Minimal Background (no decorations) */}
-  <div className="auth-background"></div>
-
+      <div className="auth-background-layer"></div>
+      
       {/* Header */}
       <header className="auth-header">
-        <div className="auth-logo">
-          <div className="auth-logo-icon"></div>
+        <Link to="/" className="auth-logo">
+          <div className="auth-logo-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="white" strokeWidth="2"/>
+              <path d="M12 8V16" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M8 12H16" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </div>
           <span>JUNE FLINT</span>
+        </Link>
+        <div className="auth-header-actions">
+          <Link to="/" className="back-home-link">
+            <span>Back to Home</span>
+          </Link>
+          <ThemeToggle theme={theme} onToggle={onThemeToggle} />
         </div>
-        <ThemeToggle theme={theme} onToggle={onThemeToggle} />
       </header>
 
       {/* Main Content */}
@@ -68,33 +78,26 @@ export default function Login({ theme, onThemeToggle }) {
           initial="hidden"
           animate="visible"
         >
-          {/* Left Side - Branding */}
-          <motion.div className="auth-branding" variants={itemVariants}>
-            <div className="auth-brand-content">
-              <h1 className="auth-brand-title">Welcome Back</h1>
-              <p className="auth-brand-text">
-                Reconnect with your inner peace and continue your wellness journey
+          {/* Left Side - Visual Branding */}
+          <motion.div className="auth-branding-visual" variants={itemVariants}>
+            <div className="auth-visual-overlay"></div>
+            <img src={authBg} alt="Yoga Studio" className="auth-visual-img" />
+            <div className="auth-visual-content">
+              <h1 className="auth-visual-title">Elevate Your Practice</h1>
+              <p className="auth-visual-text">
+                Your journey to mindfulness continues here. Welcome back to June Flint.
               </p>
-              <div className="auth-features">
-                <div className="auth-feature-item">
-                  <span>Access all classes</span>
-                </div>
-                <div className="auth-feature-item">
-                  <span>Book sessions</span>
-                </div>
-                <div className="auth-feature-item">
-                  <span>Talk space access</span>
-                </div>
+              <div className="auth-visual-quote">
+                "Yoga is the journey of the self, through the self, to the self."
               </div>
             </div>
-            {/* no decorative shapes */}
           </motion.div>
 
           {/* Right Side - Form Card */}
           <motion.div className="auth-card" variants={itemVariants}>
             <div className="auth-card-header">
-              <h2 className="auth-card-title">Login</h2>
-              <p className="auth-card-subtitle">Enter your credentials to access your account</p>
+              <h2 className="auth-card-title">Welcome Back</h2>
+              <p className="auth-card-subtitle">Please enter your details to sign in</p>
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
@@ -105,7 +108,7 @@ export default function Login({ theme, onThemeToggle }) {
                   id="email"
                   name="email"
                   className="auth-input"
-                  placeholder="your@email.com"
+                  placeholder="name@example.com"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -113,13 +116,16 @@ export default function Login({ theme, onThemeToggle }) {
               </div>
 
               <div className="auth-form-group">
-                <label htmlFor="password">Password</label>
+                <div className="label-row">
+                  <label htmlFor="password">Password</label>
+                  <a href="#forgot" className="forgot-link">Forgot?</a>
+                </div>
                 <input
                   type="password"
                   id="password"
                   name="password"
                   className="auth-input"
-                  placeholder="Enter your password"
+                  placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -129,9 +135,8 @@ export default function Login({ theme, onThemeToggle }) {
               <div className="auth-form-options">
                 <label className="auth-checkbox-label">
                   <input type="checkbox" className="auth-checkbox" />
-                  <span>Remember me</span>
+                  <span>Keep me signed in</span>
                 </label>
-                <a href="#forgot" className="auth-link">Forgot password?</a>
               </div>
 
               <button type="submit" className="auth-btn auth-btn-primary">
@@ -142,22 +147,20 @@ export default function Login({ theme, onThemeToggle }) {
               </button>
             </form>
 
-            {/* social sign-in removed for minimal professional UI */}
-
             <p className="auth-footer-text">
-              Don't have an account?{' '}
+              New to June Flint?{' '}
               <Link to="/join" className="auth-link">
-                Join now
+                Create an account
               </Link>
             </p>
           </motion.div>
         </motion.div>
       </main>
 
-      {/* Footer */}
-      <footer className="auth-footer">
-        <p>&copy; 2024 June Flint. All rights reserved.</p>
+      <footer className="auth-page-footer">
+        <p>&copy; 2024 June Flint Wellness. All rights reserved.</p>
       </footer>
     </div>
   );
 }
+
