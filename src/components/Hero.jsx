@@ -51,9 +51,9 @@ function MouseGlowOrb() {
         top: 0,
       }}
     >
-      <div className="orb-glow inner"></div>
-      <div className="orb-glow middle"></div>
-      <div className="orb-glow outer"></div>
+      <div className="orb-glow inner" style={{ background: 'transparent' }}></div>
+      <div className="orb-glow middle" style={{ background: 'transparent' }}></div>
+      <div className="orb-glow outer" style={{ background: 'transparent' }}></div>
     </div>
   );
 }
