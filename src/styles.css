@@ -16383,8 +16383,8 @@ button:hover {
   }
 }
 
-/* Hide crystals in dark mode */
-[data-theme="dark"] .floating-crystals-container {
+/* Hide crystals in light mode */
+[data-theme="light"] .floating-crystals-container {
   display: none !important;
 }
 
