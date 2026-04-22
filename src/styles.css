@@ -13999,7 +13999,10 @@ button:hover {
 }
 
 [data-theme="light"] .imotti-hero-title-main {
-  color: #111827;
+  background: linear-gradient(135deg, #111827 0%, #4b5563 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 [data-theme="light"] .imotti-hero-title-accent {
@@ -16469,5 +16472,69 @@ button:hover {
   
   .close-lightbox {
     top: -30px;
+  }
+}
+
+/* ========================================
+   Additional Mobile Responsive Enhancements
+   ======================================== */
+
+/* Mobile container constraints */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+    max-width: 100%;
+  }
+  
+  .app-root {
+    overflow-x: hidden;
+  }
+  
+  /* Ensure images don't overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Form elements mobile */
+  input, textarea, select {
+    font-size: 16px;
+  }
+  
+  /* Glass card mobile */
+  .glass-card {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+}
+
+/* Small mobile (max-width: 360px) */
+@media (max-width: 360px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .hero-title,
+  .hero-main-title {
+    font-size: 1.5rem;
+  }
+  
+  .hero-description {
+    font-size: 0.9rem;
+  }
+  
+  /* Footer small mobile */
+  .footer-grid {
+    gap: 24px;
+  }
+  
+  .footer-section {
+    padding: 0 8px;
   }
 }
