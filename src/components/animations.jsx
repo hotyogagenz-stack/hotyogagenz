@@ -180,3 +180,20 @@ export const ParallaxCard = ({ children, className = '' }) => (
     {children}
   </motion.div>
 );
+
+// FloatIn - Elements float up with subtle bounce
+export const FloatIn = ({ children, delay = 0, className = '' }) => (
+  <motion.div
+    className={className}
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-50px' }}
+    transition={{
+      duration: 0.7,
+      ease: [0.34, 1.56, 0.64, 1],
+      delay
+    }}
+  >
+    {children}
+  </motion.div>
+);

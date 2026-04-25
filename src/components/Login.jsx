@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import authBg from '../assets/auth-bg.png';
+import { useAuth } from '../auth/AuthContext';
+import { getFirebaseErrorMessage } from '../firebase/errors';
 
 export default function Login({ theme, onThemeToggle }) {
   const navigate = useNavigate();
+  const { signIn, resetPassword, user, isConfigured } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const [remember, setRemember] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [info, setInfo] = useState(null);
+
+  useEffect(() => {
+    if (user) navigate('/dashboard');
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -18,9 +29,38 @@ export default function Login({ theme, onThemeToggle }) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login attempt:', formData);
+    setError(null);
+    setInfo(null);
+    setSubmitting(true);
+    try {
+      await signIn({ email: formData.email, password: formData.password, remember });
+      navigate('/dashboard');
+    } catch (err) {
+      setError(getFirebaseErrorMessage(err));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleForgot = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setInfo(null);
+    if (!formData.email) {
+      setError('Enter your email first, then click Forgot.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await resetPassword(formData.email);
+      setInfo('Password reset email sent. Check your inbox.');
+    } catch (err) {
+      setError(getFirebaseErrorMessage(err));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const containerVariants = {
@@ -100,6 +140,15 @@ export default function Login({ theme, onThemeToggle }) {
               <p className="auth-card-subtitle">Please enter your details to sign in</p>
             </div>
 
+            {!isConfigured && (
+              <div className="auth-alert auth-alert-warn">
+                Firebase isn’t configured yet. Add env vars in <code>hotyogagenz/.env</code> (see{' '}
+                <code>hotyogagenz/.env.example</code>).
+              </div>
+            )}
+            {error && <div className="auth-alert auth-alert-error">{error}</div>}
+            {info && <div className="auth-alert auth-alert-ok">{info}</div>}
+
             <form onSubmit={handleSubmit} className="auth-form">
               <div className="auth-form-group">
                 <label htmlFor="email">Email Address</label>
@@ -118,7 +167,9 @@ export default function Login({ theme, onThemeToggle }) {
               <div className="auth-form-group">
                 <div className="label-row">
                   <label htmlFor="password">Password</label>
-                  <a href="#forgot" className="forgot-link">Forgot?</a>
+                  <a href="#forgot" className="forgot-link" onClick={handleForgot}>
+                    Forgot?
+                  </a>
                 </div>
                 <input
                   type="password"
@@ -134,12 +185,17 @@ export default function Login({ theme, onThemeToggle }) {
 
               <div className="auth-form-options">
                 <label className="auth-checkbox-label">
-                  <input type="checkbox" className="auth-checkbox" />
+                  <input
+                    type="checkbox"
+                    className="auth-checkbox"
+                    checked={remember}
+                    onChange={(e) => setRemember(e.target.checked)}
+                  />
                   <span>Keep me signed in</span>
                 </label>
               </div>
 
-              <button type="submit" className="auth-btn auth-btn-primary">
+              <button type="submit" className="auth-btn auth-btn-primary" disabled={submitting}>
                 <span>Sign In</span>
                 <svg className="auth-btn-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -163,4 +219,3 @@ export default function Login({ theme, onThemeToggle }) {
     </div>
   );
 }
-

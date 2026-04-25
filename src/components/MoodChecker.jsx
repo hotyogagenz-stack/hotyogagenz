@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FadeUp, FadeInFromLeft, StaggerContainer, StaggerItem, HoverLift } from './animations';
 
-const moodData = {
+const defaultMoodData = {
   'Sad': {
     quote: '"This too shall pass. You are stronger than you know."',
     exercise: '4-7-8 Breathing: Inhale 4s, Hold 7s, Exhale 8s',
@@ -34,7 +34,7 @@ const moodData = {
   }
 };
 
-const moods = [
+const defaultMoods = [
   { key: 'Sad', label: 'Feeling Low', description: 'When melancholy weighs you down' },
   { key: 'Anxious', label: 'Restless', description: 'When worry clouds your mind' },
   { key: 'Angry', label: 'Frustrated', description: 'When tension builds inside' },
@@ -42,7 +42,9 @@ const moods = [
   { key: 'Happy', label: 'Content', description: 'When joy fills your heart' }
 ];
 
-export default function MoodChecker() {
+export default function MoodChecker({ moods: customMoods, moodData: customMoodData }) {
+  const moodsToUse = customMoods || defaultMoods;
+  const moodDataToUse = customMoodData || defaultMoodData;
   const [selectedMood, setSelectedMood] = useState(null);
   const [showContent, setShowContent] = useState(false);
 
@@ -71,28 +73,28 @@ export default function MoodChecker() {
           </FadeInFromLeft>
         </div>
 
-        <StaggerContainer className="mood-grid" staggerDelay={0.1}>
-          {moods.map((mood) => (
-            <StaggerItem key={mood.key}>
-              <HoverLift>
-                <button
-                  className={`mood-option ${selectedMood === mood.key ? 'selected' : ''}`}
-                  onClick={() => handleMoodSelect(mood.key)}
-                >
-                  <span className="mood-option-label">{mood.label}</span>
-                  <span className="mood-option-desc">{mood.description}</span>
-                </button>
-              </HoverLift>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
+         <StaggerContainer className="mood-grid" staggerDelay={0.1}>
+           {moodsToUse.map((mood) => (
+             <StaggerItem key={mood.key}>
+               <HoverLift>
+                 <button
+                   className={`mood-option ${selectedMood === mood.key ? 'selected' : ''}`}
+                   onClick={() => handleMoodSelect(mood.key)}
+                 >
+                   <span className="mood-option-label">{mood.label}</span>
+                   <span className="mood-option-desc">{mood.description}</span>
+                 </button>
+               </HoverLift>
+             </StaggerItem>
+           ))}
+         </StaggerContainer>
 
         {showContent && selectedMood && (
           <div className="mood-results">
-            <div className="mood-results-header">
-              <h3>Your Personalized Wellness Plan</h3>
-              <p>Based on your selection: <strong>{moods.find(m => m.key === selectedMood)?.label}</strong></p>
-            </div>
+             <div className="mood-results-header">
+               <h3>Your Personalized Wellness Plan</h3>
+               <p>Based on your selection: <strong>{moodsToUse.find(m => m.key === selectedMood)?.label}</strong></p>
+             </div>
             
             <div className="mood-cards">
               <div className="mood-card">
@@ -102,7 +104,7 @@ export default function MoodChecker() {
                   </svg>
                   <h4>Breathing Exercise</h4>
                 </div>
-                <p>{moodData[selectedMood].exercise}</p>
+                 <p>{moodDataToUse[selectedMood].exercise}</p>
               </div>
               
               <div className="mood-card">
@@ -112,7 +114,7 @@ export default function MoodChecker() {
                   </svg>
                   <h4>Words of Wisdom</h4>
                 </div>
-                <p className="mood-quote">{moodData[selectedMood].quote}</p>
+                 <p className="mood-quote">{moodDataToUse[selectedMood].quote}</p>
               </div>
               
               <div className="mood-card">
@@ -122,7 +124,7 @@ export default function MoodChecker() {
                   </svg>
                   <h4>Recommendation</h4>
                 </div>
-                <p>{moodData[selectedMood].suggestion}</p>
+                 <p>{moodDataToUse[selectedMood].suggestion}</p>
               </div>
               
               <div className="mood-card">
@@ -133,7 +135,7 @@ export default function MoodChecker() {
                   </svg>
                   <h4>Recommended Yoga Pose</h4>
                 </div>
-                <p>{moodData[selectedMood].pose}</p>
+                 <p>{moodDataToUse[selectedMood].pose}</p>
               </div>
             </div>
             

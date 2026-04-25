@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink, Link, useNavigate } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useAuth } from '../auth/AuthContext'
+
+const MotionLink = motion.create(Link);
 
 export default function Header({ theme, onThemeToggle }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user, signOutUser } = useAuth();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -21,10 +26,23 @@ export default function Header({ theme, onThemeToggle }) {
     { to: '/healing', label: 'Healing' },
     { to: '/blog', label: 'Blog' },
     { to: '/imotti-guide', label: 'Imotti Guide' },
-    { to: '/gallery', label: 'Gallery' },
-    { to: '/login', label: 'Login' },
-    { to: '/join', label: 'Join' }
+    { to: '/gallery', label: 'Gallery' }
   ];
+
+  const authNavItems = user
+    ? [{ to: '/dashboard', label: 'Dashboard' }]
+    : [
+        { to: '/login', label: 'Login' },
+        { to: '/join', label: 'Join' }
+      ];
+
+  const handleLogout = async () => {
+    await signOutUser();
+    closeMobileMenu();
+    navigate('/');
+  };
+
+  const getNavClassName = ({ isActive }) => (isActive ? 'active' : undefined);
 
   return (
     <motion.header
@@ -34,14 +52,16 @@ export default function Header({ theme, onThemeToggle }) {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="container">
-        <motion.div
+        <MotionLink
+          to="/"
           className="logo"
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.3 }}
+          onClick={closeMobileMenu}
         >
           <div className="logo-icon"></div>
           <span>JUNE FLINT</span>
-        </motion.div>
+        </MotionLink>
 
         {/* Mobile Menu Toggle */}
         <motion.button
@@ -64,7 +84,7 @@ export default function Header({ theme, onThemeToggle }) {
               exit={{ opacity: 0, x: '100%' }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
-              {navItems.map((item, index) => (
+              {[...navItems, ...authNavItems].map((item, index) => (
                 <motion.div
                   key={item.label}
                   initial={{ opacity: 0, x: 20 }}
@@ -72,19 +92,31 @@ export default function Header({ theme, onThemeToggle }) {
                   transition={{ delay: index * 0.05 }}
                 >
                   {item.to ? (
-                    <Link to={item.to} onClick={closeMobileMenu}>{item.label}</Link>
+                    <NavLink
+                      to={item.to}
+                      end={item.to === '/'}
+                      className={getNavClassName}
+                      onClick={closeMobileMenu}
+                    >
+                      {item.label}
+                    </NavLink>
                   ) : (
                     <a href={item.href} onClick={closeMobileMenu}>{item.label}</a>
                   )}
                 </motion.div>
               ))}
               <ThemeToggle theme={theme} onToggle={onThemeToggle} />
+              {user && (
+                <button type="button" className="logout-btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              )}
             </motion.nav>
           )}
         </AnimatePresence>
 
         <nav className={`nav desktop-nav`}>
-          {navItems.map((item, index) => (
+          {[...navItems, ...authNavItems].map((item, index) => (
             <motion.div
               key={item.label}
               initial={{ opacity: 0, y: -20 }}
@@ -92,13 +124,24 @@ export default function Header({ theme, onThemeToggle }) {
               transition={{ delay: index * 0.05 }}
             >
               {item.to ? (
-                <Link to={item.to}>{item.label}</Link>
+                <NavLink
+                  to={item.to}
+                  end={item.to === '/'}
+                  className={getNavClassName}
+                >
+                  {item.label}
+                </NavLink>
               ) : (
                 <a href={item.href}>{item.label}</a>
               )}
             </motion.div>
           ))}
           <ThemeToggle theme={theme} onToggle={onThemeToggle} />
+          {user && (
+            <button type="button" className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
         </nav>
       </div>
     </motion.header>

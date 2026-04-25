@@ -1,6 +1,12 @@
-New site starter
+June Flint Wellness (Vite + React)
 
-This repository was reset to a minimal Vite + React starter so we can build the site step-by-step.
+## Firebase Auth + Dashboard
+
+Routes:
+
+- `/join` create account (Firebase Auth)
+- `/login` sign in (Firebase Auth)
+- `/dashboard` protected page (Firestore-backed plans + practice sessions)
 
 Quick start:
 
@@ -10,10 +16,15 @@ Quick start:
 npm install
 ```
 
-2. Run dev server
+2. Configure Firebase
+
+- Create `hotyogagenz/.env` from `hotyogagenz/.env.example`
+- Setup steps: `hotyogagenz/docs/FIREBASE.md`
+
+3. Run dev server
 
 ```bash
 npm run dev
 ```
 
-Tell me which section you'd like to scaffold first (hero, features, contact, pricing, etc.) and I'll implement it.
+If Firebase env vars are missing, the app still runs but auth actions will show a configuration warning.
