@@ -21,6 +21,21 @@ import Login from './components/Login';
 import Join from './components/Join';
 import Gallery from './components/Gallery';
 import Dashboard from './components/Dashboard';
+import ImottiGuide from './components/ImottiGuide';
+import About from './components/About';
+import Mission from './components/Mission';
+import Careers from './components/Careers';
+import Press from './components/Press';
+import HelpCenter from './components/HelpCenter';
+import FAQ from './components/FAQ';
+import SafetyPrivacy from './components/SafetyPrivacy';
+import Community from './components/Community';
+import Contact from './components/Contact';
+import WellnessGuide from './components/WellnessGuide';
+import YogaTips from './components/YogaTips';
+import Mindfulness from './components/Mindfulness';
+import Terms from './components/Terms';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import RequireAuth from './auth/RequireAuth';
 
 // Home Page Component
@@ -98,6 +113,160 @@ function ImottiGuidePage({ theme, onThemeToggle }) {
     <div className="app-root">
       <Header theme={theme} onThemeToggle={onThemeToggle} />
       <ImottiGuide isPage={true} />
+      <Footer />
+    </div>
+  );
+}
+
+// About Page Component
+function AboutPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <About theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Mission Page Component
+function MissionPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Mission theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Careers Page Component
+function CareersPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Careers theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Press Page Component
+function PressPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Press theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Help Center Page Component
+function HelpCenterPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <HelpCenter theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// FAQ Page Component
+function FAQPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <FAQ theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Safety & Privacy Page Component
+function SafetyPrivacyPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <SafetyPrivacy theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Community Page Component
+function CommunityPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Community theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Contact Page Component
+function ContactPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Contact theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Wellness Guide Page Component
+function WellnessGuidePage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <WellnessGuide theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Yoga Tips Page Component
+function YogaTipsPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <YogaTips theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Mindfulness Page Component
+function MindfulnessPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Mindfulness theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Terms Page Component
+function TermsPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <Terms theme={theme} onThemeToggle={onThemeToggle} />
+      <Footer />
+    </div>
+  );
+}
+
+// Privacy Policy Page Component
+function PrivacyPolicyPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <PrivacyPolicy theme={theme} onThemeToggle={onThemeToggle} />
       <Footer />
     </div>
   );
@@ -181,6 +350,62 @@ export default function App() {
         <Route
           path="/imotti-guide"
           element={<ImottiGuidePage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/about"
+          element={<AboutPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/mission"
+          element={<MissionPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/careers"
+          element={<CareersPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/press"
+          element={<PressPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/help"
+          element={<HelpCenterPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/faq"
+          element={<FAQPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/safety"
+          element={<SafetyPrivacyPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/community"
+          element={<CommunityPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/contact"
+          element={<ContactPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/wellness-guide"
+          element={<WellnessGuidePage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/yoga-tips"
+          element={<YogaTipsPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/mindfulness"
+          element={<MindfulnessPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/terms"
+          element={<TermsPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/privacy-policy"
+          element={<PrivacyPolicyPage theme={theme} onThemeToggle={handleThemeToggle} />}
         />
         <Route
           path="/login"

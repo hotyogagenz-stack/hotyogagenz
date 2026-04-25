@@ -1,356 +1,545 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MoodChecker from './MoodChecker';
+import { useAuth } from '../auth/AuthContext';
+import { subscribeUserProfile } from '../firebase/profile';
+import { subscribeSessions } from '../firebase/sessions';
+import { subscribePlans } from '../firebase/plans';
+// No decorative icons or emojis for a formal, boxed dashboard
 import GlassCard from './GlassCard';
-import { FaRegCalendarAlt, FaHeart, FaComments, FaList, FaChartLine, FaTrophy, FaCog, FaBook, FaUserPlus, FaRobot, FaExclamationCircle } from 'react-icons/fa';
-import { FiMoon, FiSun } from 'react-icons/fi';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [mood, setMood] = useState(null);
-  const [journalEntries, setJournalEntries] = useState([]);
-  const [savedItems, setSavedItems] = useState([]);
+  const { user } = useAuth();
+  const [userProfile, setUserProfile] = useState(null);
+  const [membership, setMembership] = useState(null);
   const [upcomingSessions, setUpcomingSessions] = useState([]);
-  const [achievements, setAchievements] = useState([]);
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [moodHistory, setMoodHistory] = useState([]);
+  const [progressData, setProgressData] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data for demonstration
+  // Format date helper
+  const formatDate = (date) => {
+    if (!date) return '';
+    const d = date instanceof Date ? date : date.toDate ? date.toDate() : new Date(date);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  // Format time helper
+  const formatTime = (date) => {
+    if (!date) return '';
+    const d = date instanceof Date ? date : date.toDate ? date.toDate() : new Date(date);
+    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  };
+
+  // Fetch real data from Firebase
   useEffect(() => {
-    // Initialize with some mock data
-    setJournalEntries([
-      { id: 1, text: 'Today I felt grateful for small wins.', date: new Date().toISOString().split('T')[0] },
-      { id: 2, text: 'Had a breakthrough in my yoga practice.', date: new Date(Date.now() - 86400000).toISOString().split('T')[0] },
-    ]);
-    
-    setSavedItems([
-      { id: 1, title: '5-Minute Morning Yoga', type: 'video' },
-      { id: 2, title: 'Journaling Prompts for Self-Love', type: 'article' },
-      { id: 3, title: 'Guided Meditation for Anxiety', type: 'audio' },
-    ]);
-    
-    setUpcomingSessions([
-      { id: 1, title: 'Hot Yoga Session', time: 'Tomorrow 7:00 PM', type: 'yoga' },
-      { id: 2, title: 'Listener Chat', time: 'Friday 3:00 PM', type: 'listener' },
-    ]);
-    
-    setAchievements([
-      { id: 1, title: 'First Check-in', icon: '🌱', earned: true },
-      { id: 2, title: '3-Day Streak', icon: '🔥', earned: true },
-      { id: 3, title: 'Yoga Starter', icon: '🧘', earned: false },
-    ]);
-    
-    // Initialize mood history with last 7 days (mock)
-    const history = [];
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      // Random mood for demo
-      const moods = ['😊', '😐', '😔', '😣', '😡'];
-      const randomMood = moods[Math.floor(Math.random() * moods.length)];
-      history.push({ date: date.toISOString().split('T')[0], mood: randomMood });
+    if (!user?.uid) {
+      setLoading(false);
+      return;
     }
-    setMoodHistory(history);
-  }, []);
 
-  const handleMoodSelect = (selectedMood) => {
-    setMood(selectedMood);
-    // Add to mood history (today)
-    const today = new Date().toISOString().split('T')[0];
-    const updatedHistory = [...moodHistory];
-    const todayIndex = updatedHistory.findIndex(entry => entry.date === today);
-    if (todayIndex >= 0) {
-      updatedHistory[todayIndex].mood = selectedMood;
-    } else {
-      updatedHistory.push({ date: today, mood: selectedMood });
-    }
-    setMoodHistory(updatedHistory);
-  };
+    setLoading(true);
 
-  const handleJournalSubmit = (text) => {
-    const newEntry = {
-      id: Date.now(),
-      text,
-      date: new Date().toISOString().split('T')[0]
+    // Subscribe to user profile
+    const unsubscribeProfile = subscribeUserProfile(
+      user.uid,
+      (profile) => {
+        if (profile) {
+          setUserProfile({
+            name: profile.displayName || profile.email?.split('@')[0] || 'User',
+            email: profile.email || '—',
+            avatar: profile.photoURL || null,
+            joinDate: profile.createdAt ? formatDate(profile.createdAt) : '—'
+          });
+        } else {
+          setUserProfile({
+            name: user.displayName || user.email?.split('@')[0] || 'User',
+            email: user.email || '—',
+            avatar: user.photoURL || null,
+            joinDate: '—'
+          });
+        }
+      },
+      (err) => {
+        console.error('Profile subscription error:', err);
+      }
+    );
+
+    // Subscribe to user sessions (activities)
+    const unsubscribeSessions = subscribeSessions(
+      user.uid,
+      (sessions) => {
+        // Build progress data from sessions
+        const monthlyData = {};
+        sessions.forEach((s) => {
+          const d = s.happenedAt?.toDate ? s.happenedAt.toDate() : new Date(s.happenedAt);
+          if (d && !isNaN(d.getTime())) {
+            const monthKey = d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+            const monthLabel = d.toLocaleString('en-US', { month: 'short' });
+            if (!monthlyData[monthKey]) {
+              monthlyData[monthKey] = { month: monthLabel, sessions: 0, minutes: 0 };
+            }
+            monthlyData[monthKey].sessions += 1;
+            monthlyData[monthKey].minutes += Number(s.durationMinutes || 0);
+          }
+        });
+
+        const progress = Object.values(monthlyData)
+          .sort((a, b) => {
+            // Sort by month order - last 4 months
+            return 0;
+          })
+          .slice(-4);
+
+        if (progress.length === 0) {
+          // Default empty state
+          const now = new Date();
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          const last4 = [];
+          for (let i = 3; i >= 0; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            last4.push({ month: months[d.getMonth()], sessions: 0, minutes: 0 });
+          }
+          setProgressData(last4);
+        } else {
+          setProgressData(progress);
+        }
+
+        // Build upcoming sessions (recent/future activities)
+        const upcoming = sessions
+          .filter((s) => {
+            const d = s.happenedAt?.toDate ? s.happenedAt.toDate() : new Date(s.happenedAt);
+            return d && d >= new Date();
+          })
+          .slice(0, 3)
+          .map((s, idx) => ({
+            id: s.id || idx,
+            title: s.type ? `${s.type.charAt(0).toUpperCase() + s.type.slice(1)} Session` : 'Yoga Session',
+            date: formatDate(s.happenedAt),
+            time: formatTime(s.happenedAt),
+            instructor: 'Instructor',
+            type: s.type || 'yoga',
+            status: 'confirmed'
+          }));
+
+        // If no upcoming sessions, show recent ones as completed
+        if (upcoming.length === 0 && sessions.length > 0) {
+          const recent = sessions.slice(0, 3).map((s, idx) => ({
+            id: s.id || idx,
+            title: s.type ? `${s.type.charAt(0).toUpperCase() + s.type.slice(1)} Session` : 'Yoga Session',
+            date: formatDate(s.happenedAt),
+            time: formatTime(s.happenedAt),
+            instructor: 'Completed',
+            type: s.type || 'yoga',
+            status: 'completed'
+          }));
+          setUpcomingSessions(recent);
+        } else {
+          setUpcomingSessions(upcoming);
+        }
+      },
+      (err) => {
+        console.error('Sessions subscription error:', err);
+      }
+    );
+
+    // Subscribe to user plans
+    const unsubscribePlansSub = subscribePlans(
+      user.uid,
+      (plans) => {
+        if (plans && plans.length > 0) {
+          const activePlan = plans.find((p) => p.status === 'active') || plans[0];
+          setMembership({
+            plan: activePlan.title || 'Basic Plan',
+            status: activePlan.status === 'active' ? 'Active' : 'Inactive',
+            nextBilling: 'See billing page',
+            sessionsLeft: activePlan.goal ? parseInt(activePlan.goal) || 0 : 10,
+            price: 'Check plan details'
+          });
+        } else {
+          setMembership({
+            plan: 'No active plan',
+            status: 'Inactive',
+            nextBilling: '—',
+            sessionsLeft: 0,
+            price: '—'
+          });
+        }
+      },
+      (err) => {
+        console.error('Plans subscription error:', err);
+      }
+    );
+
+    // Set notifications based on recent activity
+    const recentNotifications = [
+      {
+        id: 1,
+        message: 'Welcome to your dashboard! Track your yoga journey here.',
+        time: 'Just now',
+        type: 'welcome',
+        read: false
+      }
+    ];
+    setNotifications(recentNotifications);
+
+    setLoading(false);
+
+    // Cleanup subscriptions
+    return () => {
+      if (unsubscribeProfile) unsubscribeProfile();
+      if (unsubscribeSessions) unsubscribeSessions();
+      if (unsubscribePlansSub) unsubscribePlansSub();
     };
-    setJournalEntries([newEntry, ...journalEntries]);
+  }, [user]);
+
+  const handleSessionClick = (session) => {
+    navigate(`/session/${session.id}`);
   };
 
-  const handleSaveItem = (item) => {
-    if (!savedItems.some(saved => saved.id === item.id)) {
-      setSavedItems([...savedItems, item]);
-    }
+  const handleMarkAsRead = (id) => {
+    setNotifications(current =>
+      current.map((notification) => (notification.id === id ? { ...notification, read: true } : notification))
+    );
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+  const handleQuickSupport = () => {
+    navigate('/help');
   };
 
-  const handleQuickAction = (action) => {
-    switch(action) {
-      case 'talk':
-        navigate('/talk-space');
-        break;
-      case 'yoga':
-        navigate('/hot-yoga');
-        break;
-      case 'healing':
-        navigate('/healing');
-        break;
-      case 'journal':
-        document.querySelector('.dashboard-journal')?.scrollIntoView({ behavior: 'smooth' });
-        break;
-      default:
-        break;
-    }
-  };
+  const totalSessions = progressData.reduce((sum, month) => sum + month.sessions, 0);
+  const totalMinutes = progressData.reduce((sum, month) => sum + month.minutes, 0);
+  const maxSessions = Math.max(1, ...progressData.map((month) => month.sessions));
+  const nextSession = upcomingSessions[0];
+  const unreadCount = notifications.filter((notification) => !notification.read).length;
 
   return (
-    <div className="dashboard-container">
-      {/* Welcome + Mood Check-in */}
-      <section className="dashboard-welcome">
-        <div className="welcome-content">
-          <h1>Hey there 🌙 How are you feeling today?</h1>
-          <p className="welcome-subtitle">Track your mood to unlock personalized wellness recommendations</p>
-        </div>
-        <MoodChecker onMoodSelect={handleMoodSelect} />
-      </section>
+    <div className="dashboard-ui">
+      <GlassCard className="dashboard-ui__hero" blur={16} opacity={0.08} radius="24px">
+        <div className="dashboard-ui__heroMain">
+          <div className="dashboard-ui__eyebrow">Member Dashboard</div>
+          <h1 className="dashboard-ui__title">Dashboard</h1>
+          <p className="dashboard-ui__subtitle">
+            Welcome back, {userProfile?.name || '—'}. Here’s your membership, progress, and upcoming sessions.
+          </p>
 
-      {/* Emergency Calm Button - Fixed position */}
-      <button className="emergency-calm-btn" onClick={() => {/* Open emergency calm overlay */}}>
-        <FaExclamationCircle />
-        <span>I'm overwhelmed</span>
-      </button>
-
-      {/* Today's Wellness Snapshot */}
-      <section className="dashboard-snapshot">
-        <h2>Today's Wellness Snapshot</h2>
-        <div className="snapshot-grid">
-          <GlassCard className="snapshot-card">
-            <div className="snapshot-icon">😊</div>
-            <h3>Mood Score</h3>
-            <p className="snapshot-value">{mood || 'Not set'}</p>
-          </GlassCard>
-          <GlassCard className="snapshot-card">
-            <div className="snapshot-icon">🧘</div>
-            <h3>Yoga Minutes</h3>
-            <p className="snapshot-value">85 min</p>
-          </GlassCard>
-          <GlassCard className="snapshot-card">
-            <div className="snapshot-icon">📓</div>
-            <h3>Journal Streak</h3>
-            <p className="snapshot-value">{journalEntries.length} Days</p>
-          </GlassCard>
-          <GlassCard className="snapshot-card">
-            <div className="snapshot-icon">📅</div>
-            <h3>Sessions</h3>
-            <p className="snapshot-value">{upcomingSessions.length} Upcoming</p>
-          </GlassCard>
-          <GlassCard className="snapshot-card">
-            <div className="snapshot-icon">📈</div>
-            <h3>Healing Progress</h3>
-            <p className="snapshot-value">75%</p>
-          </GlassCard>
-        </div>
-      </section>
-
-      {/* Personalized Recommendations */}
-      <section className="dashboard-recommendations">
-        <h2>Personalized for You</h2>
-        <div className="recommendations-grid">
-          {mood ? (
-            <>
-              {mood === '😔' || mood === '😣' || mood === '😡' ? (
-                <GlassCard className="recommendation-card">
-                  <div className="rec-icon">💙</div>
-                  <h3>Heart Healing</h3>
-                  <p>Try this calming audio session</p>
-                  <button onClick={() => navigate('/healing')}>Explore Healing</button>
-                </GlassCard>
-              ) : null}
-              {mood === '😔' || mood === '😣' ? (
-                <GlassCard className="recommendation-card">
-                  <div className="rec-icon">🧘</div>
-                  <h3>Soft Yoga Stretch</h3>
-                  <p>Gentle flow for emotional release</p>
-                  <button onClick={() => navigate('/hot-yoga')}>Start Session</button>
-                </GlassCard>
-              ) : null}
-              {mood === '😐' || mood === '😊' ? (
-                <GlassCard className="recommendation-card">
-                  <div className="rec-icon">📓</div>
-                  <h3>Journal Prompt</h3>
-                  <p>What's one thing you're proud of today?</p>
-                  <button onClick={() => handleQuickAction('journal')}>Open Journal</button>
-                </GlassCard>
-              ) : null}
-            </>
-          ) : (
-            <GlassCard className="recommendation-card">
-              <div className="rec-icon">🎯</div>
-              <h3>Start Your Journey</h3>
-              <p>Check in with your mood to get personalized recommendations</p>
-              <button onClick={() => document.querySelector('.dashboard-welcome')?.scrollIntoView({ behavior: 'smooth' })}>Check Mood Now</button>
-            </GlassCard>
-          )}
-        </div>
-      </section>
-
-      {/* Quick Action Buttons */}
-      <section className="dashboard-actions">
-        <h2>Quick Actions</h2>
-        <div className="actions-grid">
-          <button className="action-btn" onClick={() => handleQuickAction('talk')}>
-            <FaUserPlus /> Talk to Listener
-          </button>
-          <button className="action-btn" onClick={() => handleQuickAction('yoga')}>
-            <FaRegCalendarAlt /> Start Yoga Session
-          </button>
-          <button className="action-btn" onClick={() => handleQuickAction('healing')}>
-            <FaHeart /> Heart Healing
-          </button>
-          <button className="action-btn" onClick={() => navigate('/talk-space')}>
-            <FaComments /> Vent Anonymously
-          </button>
-          <button className="action-btn" onClick={() => handleQuickAction('journal')}>
-            <FaBook /> Journal Now
-          </button>
-        </div>
-      </section>
-
-      {/* Mood Tracker */}
-      <section className="dashboard-mood-tracker">
-        <h2>Mood Tracker</h2>
-        <div className="mood-tracker-container">
-          <div className="mood-history">
-            {moodHistory.map((day, index) => (
-              <div key={index} className="mood-day" title={day.date}>
-                <span className="mood-emoji">{day.mood}</span>
-                <span className="mood-date">{new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}</span>
-              </div>
-            ))}
+          <div className="dashboard-ui__chips" aria-label="Membership summary">
+            {membership ? (
+              <>
+                <span className="dashboard-ui__chip">{membership.plan}</span>
+                <span
+                  className={`dashboard-ui__chip dashboard-ui__chip--status dashboard-ui__chip--${membership.status.toLowerCase()}`}
+                >
+                  {membership.status}
+                </span>
+                <span className="dashboard-ui__chip">Next billing: {membership.nextBilling}</span>
+              </>
+            ) : (
+              <span className="dashboard-ui__chip">Loading membership…</span>
+            )}
           </div>
-          <p className="mood-tracker-label">Last 7 days</p>
+        </div>
+
+        <div className="dashboard-ui__heroActions">
+          <button type="button" className="btn btn-secondary dashboard-ui__btn" onClick={() => navigate('/profile')}>
+            Profile
+          </button>
+          <button type="button" className="btn btn-primary dashboard-ui__btn" onClick={() => navigate('/book')}>
+            Book session
+          </button>
+        </div>
+      </GlassCard>
+
+      <div className="dashboard-ui__kpis" role="list" aria-label="Key metrics">
+        <GlassCard className="dashboard-ui__kpi" blur={14} opacity={0.07} radius="20px" role="listitem">
+          <div className="dashboard-ui__kpiLabel">Sessions remaining</div>
+          <div className="dashboard-ui__kpiValue">{membership?.sessionsLeft ?? '—'}</div>
+          <div className="dashboard-ui__kpiMeta">{membership?.price || 'Current plan'}</div>
+        </GlassCard>
+
+        <GlassCard className="dashboard-ui__kpi" blur={14} opacity={0.07} radius="20px" role="listitem">
+          <div className="dashboard-ui__kpiLabel">Next session</div>
+          <div className="dashboard-ui__kpiValue">{nextSession ? nextSession.date : '—'}</div>
+          <div className="dashboard-ui__kpiMeta">
+            {nextSession ? `${nextSession.title} • ${nextSession.time}` : 'No sessions booked'}
+          </div>
+        </GlassCard>
+
+        <GlassCard className="dashboard-ui__kpi" blur={14} opacity={0.07} radius="20px" role="listitem">
+          <div className="dashboard-ui__kpiLabel">Total sessions</div>
+          <div className="dashboard-ui__kpiValue">{totalSessions}</div>
+          <div className="dashboard-ui__kpiMeta">Last 4 months</div>
+        </GlassCard>
+
+        <GlassCard className="dashboard-ui__kpi" blur={14} opacity={0.07} radius="20px" role="listitem">
+          <div className="dashboard-ui__kpiLabel">Total minutes</div>
+          <div className="dashboard-ui__kpiValue">{totalMinutes}</div>
+          <div className="dashboard-ui__kpiMeta">Last 4 months</div>
+        </GlassCard>
+      </div>
+
+      <section className="dashboard-ui__section" aria-label="Quick actions">
+        <div className="dashboard-ui__sectionHead">
+          <h2 className="dashboard-ui__sectionTitle">Quick actions</h2>
+        </div>
+
+        <div className="dashboard-ui__actions">
+          <button type="button" className="dashboard-ui__action" onClick={() => navigate('/schedule')}>
+            <span className="dashboard-ui__actionTitle">View schedule</span>
+            <span className="dashboard-ui__actionMeta">Browse classes</span>
+          </button>
+          <button type="button" className="dashboard-ui__action" onClick={() => navigate('/invoices')}>
+            <span className="dashboard-ui__actionTitle">Invoices</span>
+            <span className="dashboard-ui__actionMeta">Billing history</span>
+          </button>
+          <button type="button" className="dashboard-ui__action" onClick={() => navigate('/membership')}>
+            <span className="dashboard-ui__actionTitle">Membership</span>
+            <span className="dashboard-ui__actionMeta">Manage plan</span>
+          </button>
+          <button type="button" className="dashboard-ui__action" onClick={() => navigate('/invite')}>
+            <span className="dashboard-ui__actionTitle">Invite a friend</span>
+            <span className="dashboard-ui__actionMeta">Share June Flint</span>
+          </button>
         </div>
       </section>
 
-      {/* Saved Content / Favorites */}
-      <section className="dashboard-saved">
-        <h2>Saved Content</h2>
-        {savedItems.length > 0 ? (
-          <div className="saved-grid">
-            {savedItems.map((item) => (
-              <GlassCard key={item.id} className="saved-card">
-                <div className="saved-icon">
-                  {item.type === 'video' ? '🎥' : item.type === 'article' ? '📄' : '🎧'}
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.type}</p>
-                <button onClick={() => {/* Handle save/unsave */}}>Remove</button>
-              </GlassCard>
-            ))}
-          </div>
-        ) : (
-          <p className="empty-state">No saved items yet. Save content you love to find it here.</p>
-        )}
-      </section>
-
-      {/* Upcoming Bookings / Sessions */}
-      <section className="dashboard-sessions">
-        <h2>Upcoming Sessions</h2>
-        {upcomingSessions.length > 0 ? (
-          <div className="sessions-list">
-            {upcomingSessions.map((session) => (
-              <GlassCard key={session.id} className="session-card">
-                <div className="session-icon">
-                  {session.type === 'yoga' ? '🧘' : '💬'}
-                </div>
-                <h3>{session.title}</h3>
-                <p>{session.time}</p>
-                <div className="session-actions">
-                  <button>Reschedule</button>
-                  <button>Cancel</button>
-                </div>
-              </GlassCard>
-            ))}
-          </div>
-        ) : (
-          <p className="empty-state">No upcoming sessions. <a href="/hot-yoga">Book a session</a> to see it here.</p>
-        )}
-      </section>
-
-      {/* Private Journal Space */}
-      <section className="dashboard-journal">
-        <h2>Private Journal</h2>
-        <div className="journal-container">
-          {journalEntries.length > 0 ? (
-            <div className="journal-entries">
-              {journalEntries.slice(0, 3).map((entry) => (
-                <div key={entry.id} className="journal-entry">
-                  <p className="journal-text">{entry.text}</p>
-                  <small className="journal-date">{entry.date}</small>
-                </div>
-              ))}
-              {journalEntries.length > 3 && (
-                <button className="view-all-btn">View All Entries</button>
-              )}
+      <div className="dashboard-ui__layout">
+        <div className="dashboard-ui__main">
+          <section className="dashboard-ui__section" aria-label="Membership details">
+            <div className="dashboard-ui__sectionHead">
+              <h2 className="dashboard-ui__sectionTitle">Membership</h2>
             </div>
-          ) : (
-            <p className="empty-state">Your journal is empty. Start writing to capture your thoughts.</p>
-          )}
-          <textarea
-            placeholder="Today I feel..."
-            className="journal-input"
-            onChange={(e) => {/* Handle input */}}
-          />
-          <button className="journal-submit-btn">Save Entry</button>
-        </div>
-      </section>
+            <GlassCard className="dashboard-ui__panel" blur={14} opacity={0.08} radius="20px">
+              <div className="dashboard-ui__membership">
+                <div className="dashboard-ui__membershipMain">
+                  <div className="dashboard-ui__membershipPlan">{membership?.plan || '—'}</div>
+                  <div className="dashboard-ui__membershipRow">
+                    <span className="dashboard-ui__label">Status</span>
+                    <span className={`dashboard-ui__status dashboard-ui__status--${membership?.status?.toLowerCase()}`}>
+                      {membership?.status || '—'}
+                    </span>
+                  </div>
+                  <div className="dashboard-ui__membershipRow">
+                    <span className="dashboard-ui__label">Next billing</span>
+                    <span className="dashboard-ui__value">{membership?.nextBilling || '—'}</span>
+                  </div>
+                  <div className="dashboard-ui__membershipRow">
+                    <span className="dashboard-ui__label">Sessions remaining</span>
+                    <span className="dashboard-ui__value">{membership?.sessionsLeft ?? '—'}</span>
+                  </div>
+                </div>
 
-      {/* Progress + Achievements (Gamified) */}
-      <section className="dashboard-achievements">
-        <h2>Progress & Achievements</h2>
-        <div className="achievements-grid">
-          {achievements.map((achievement) => (
-            <GlassCard key={achievement.id} className="achievement-card">
-              <div className="achievement-icon">
-                {achievement.icon}
+                <div className="dashboard-ui__membershipActions">
+                  <button type="button" className="btn btn-secondary dashboard-ui__btn" onClick={() => navigate('/billing')}>
+                    Manage subscription
+                  </button>
+                  <button type="button" className="btn btn-primary dashboard-ui__btn" onClick={() => navigate('/upgrade')}>
+                    Upgrade
+                  </button>
+                </div>
               </div>
-              <h3>{achievement.title}</h3>
-              <p>{achievement.earned ? 'Earned' : 'In Progress'}</p>
             </GlassCard>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      {/* Safe Space Settings */}
-      <section className="dashboard-settings">
-        <h2>Safe Space Settings</h2>
-        <div className="settings-grid">
-          <GlassCard className="settings-card">
-            <div className="settings-icon">🔒</div>
-            <h3>Privacy & Security</h3>
-            <p>Control your data and anonymity preferences</p>
-            <button>Manage Settings</button>
-          </GlassCard>
-          <GlassCard className="settings-card">
-            <div className="settings-icon">🔔</div>
-            <h3>Notifications</h3>
-            <p>Customize your reminder and alert preferences</p>
-            <button>Manage Settings</button>
-          </GlassCard>
-          <GlassCard className="settings-card">
-            <div className="settings-icon">🎨</div>
-            <h3>Appearance</h3>
-            <p>
-              <button onClick={toggleDarkMode} className="theme-toggle-btn">
-                {isDarkMode ? <FiSun /> : <FiMoon />}
-                {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+          <section className="dashboard-ui__section" aria-label="Upcoming sessions">
+            <div className="dashboard-ui__sectionHead">
+              <h2 className="dashboard-ui__sectionTitle">Upcoming sessions</h2>
+              <button type="button" className="btn btn-secondary dashboard-ui__btnSm" onClick={() => navigate('/book')}>
+                Book session
               </button>
-            </p>
-          </GlassCard>
+            </div>
+
+            <GlassCard className="dashboard-ui__panel" blur={14} opacity={0.08} radius="20px">
+              {upcomingSessions.length > 0 ? (
+                <div className="dashboard-ui__list">
+                  {upcomingSessions.map((session) => (
+                    <button
+                      key={session.id}
+                      type="button"
+                      className="dashboard-ui__session"
+                      onClick={() => handleSessionClick(session)}
+                    >
+                      <div className="dashboard-ui__sessionTop">
+                        <span className="dashboard-ui__badge">
+                          {session.type === 'yoga' ? 'Yoga' : session.type === 'meditation' ? 'Meditation' : 'Class'}
+                        </span>
+                        <span className={`dashboard-ui__pill dashboard-ui__pill--${session.status}`}>{session.status}</span>
+                      </div>
+                      <div className="dashboard-ui__sessionTitle">{session.title}</div>
+                      <div className="dashboard-ui__sessionMeta">
+                        <span>{session.date}</span>
+                        <span className="dashboard-ui__dot" aria-hidden="true" />
+                        <span>{session.time}</span>
+                        <span className="dashboard-ui__dot" aria-hidden="true" />
+                        <span>with {session.instructor}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="empty-state">
+                  No upcoming sessions. <a href="/book">Book your first session</a>.
+                </p>
+              )}
+            </GlassCard>
+          </section>
+
+          <section className="dashboard-ui__section" aria-label="Activity progress">
+            <div className="dashboard-ui__sectionHead">
+              <h2 className="dashboard-ui__sectionTitle">Activity progress</h2>
+            </div>
+
+            <GlassCard className="dashboard-ui__panel" blur={14} opacity={0.08} radius="20px">
+              <div className="dashboard-ui__progress">
+                <div className="dashboard-ui__stats">
+                  <div className="dashboard-ui__stat">
+                    <div className="dashboard-ui__statLabel">Total sessions</div>
+                    <div className="dashboard-ui__statValue">{totalSessions}</div>
+                  </div>
+                  <div className="dashboard-ui__stat">
+                    <div className="dashboard-ui__statLabel">Total minutes</div>
+                    <div className="dashboard-ui__statValue">{totalMinutes}</div>
+                  </div>
+                  <div className="dashboard-ui__stat">
+                    <div className="dashboard-ui__statLabel">Current streak</div>
+                    <div className="dashboard-ui__statValue">3 weeks</div>
+                  </div>
+                </div>
+
+                <div className="dashboard-ui__chart" aria-label="Monthly sessions chart">
+                  <div className="dashboard-ui__chartTitle">Monthly sessions</div>
+                  <div className="dashboard-ui__bars">
+                    {progressData.map((month) => (
+                      <div key={month.month} className="dashboard-ui__bar" title={`${month.sessions} sessions`}>
+                        <div
+                          className="dashboard-ui__barFill"
+                          style={{ height: `${Math.round((month.sessions / maxSessions) * 100)}%` }}
+                        />
+                        <div className="dashboard-ui__barLabel">{month.month}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
+          </section>
         </div>
-      </section>
+
+        <aside className="dashboard-ui__side">
+          <section className="dashboard-ui__section" aria-label="Profile">
+            <div className="dashboard-ui__sectionHead">
+              <h2 className="dashboard-ui__sectionTitle">Profile</h2>
+            </div>
+            <GlassCard className="dashboard-ui__panel" blur={14} opacity={0.08} radius="20px">
+              <div className="dashboard-ui__profile">
+                <div className="dashboard-ui__avatar">
+                  {userProfile?.avatar ? (
+                    <img src={userProfile.avatar} alt={`${userProfile.name} avatar`} />
+                  ) : (
+                    <div className="dashboard-ui__avatarFallback" aria-hidden="true" />
+                  )}
+                </div>
+                <div className="dashboard-ui__profileMain">
+                  <div className="dashboard-ui__profileName">{userProfile?.name || '—'}</div>
+                  <div className="dashboard-ui__profileEmail">{userProfile?.email || '—'}</div>
+                  <div className="dashboard-ui__profileMeta">Member since {userProfile?.joinDate || '—'}</div>
+                </div>
+              </div>
+            </GlassCard>
+          </section>
+
+          <section className="dashboard-ui__section" aria-label="Notifications">
+            <div className="dashboard-ui__sectionHead">
+              <h2 className="dashboard-ui__sectionTitle">
+                Notifications{unreadCount > 0 ? <span className="dashboard-ui__count">{unreadCount}</span> : null}
+              </h2>
+            </div>
+            <GlassCard className="dashboard-ui__panel" blur={14} opacity={0.08} radius="20px">
+              {notifications.length > 0 ? (
+                <div className="dashboard-ui__list">
+                  {notifications.map((notification) => (
+                    <div
+                      key={notification.id}
+                      className={`dashboard-ui__notification ${notification.read ? 'is-read' : 'is-unread'}`}
+                      data-type={notification.type}
+                    >
+                      <div className="dashboard-ui__notificationBody">
+                        <div className="dashboard-ui__notificationTop">
+                          <span className="dashboard-ui__badge dashboard-ui__badge--muted">
+                            {notification.type.charAt(0).toUpperCase() + notification.type.slice(1)}
+                          </span>
+                          <span className="dashboard-ui__notificationTime">{notification.time}</span>
+                        </div>
+                        <div className="dashboard-ui__notificationMsg">{notification.message}</div>
+                      </div>
+                      {!notification.read && (
+                        <button
+                          type="button"
+                          className="btn btn-secondary dashboard-ui__btnXs"
+                          onClick={() => handleMarkAsRead(notification.id)}
+                        >
+                          Mark read
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="empty-state">No new notifications.</p>
+              )}
+            </GlassCard>
+          </section>
+
+          <section className="dashboard-ui__section" aria-label="Goals">
+            <div className="dashboard-ui__sectionHead">
+              <h2 className="dashboard-ui__sectionTitle">Goals</h2>
+            </div>
+            <GlassCard className="dashboard-ui__panel" blur={14} opacity={0.08} radius="20px">
+              <div className="dashboard-ui__goals">
+                <div className="dashboard-ui__goal">
+                  <div className="dashboard-ui__goalTop">
+                    <span className="dashboard-ui__goalTitle">Attend 12 sessions</span>
+                    <span className="dashboard-ui__goalMeta">8/12</span>
+                  </div>
+                  <div className="dashboard-ui__goalBar" aria-hidden="true">
+                    <i style={{ width: '66%' }} />
+                  </div>
+                </div>
+                <div className="dashboard-ui__goal">
+                  <div className="dashboard-ui__goalTop">
+                    <span className="dashboard-ui__goalTitle">30-day streak</span>
+                    <span className="dashboard-ui__goalMeta">21 days</span>
+                  </div>
+                  <div className="dashboard-ui__goalBar" aria-hidden="true">
+                    <i style={{ width: '70%' }} />
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
+          </section>
+
+          <section className="dashboard-ui__section" aria-label="Support">
+            <div className="dashboard-ui__sectionHead">
+              <h2 className="dashboard-ui__sectionTitle">Support</h2>
+            </div>
+            <GlassCard className="dashboard-ui__panel" blur={14} opacity={0.08} radius="20px">
+              <div className="dashboard-ui__support">
+                <div className="dashboard-ui__supportTitle">Need help?</div>
+                <p className="dashboard-ui__supportText">Get answers fast in our Help Center or browse FAQs.</p>
+                <div className="dashboard-ui__supportActions">
+                  <button type="button" className="btn btn-primary dashboard-ui__btn" onClick={handleQuickSupport}>
+                    Help Center
+                  </button>
+                  <button type="button" className="btn btn-secondary dashboard-ui__btn" onClick={() => navigate('/faq')}>
+                    FAQs
+                  </button>
+                </div>
+                <div className="dashboard-ui__supportMeta">Mon–Fri, 9AM–6PM EST</div>
+              </div>
+            </GlassCard>
+          </section>
+        </aside>
+      </div>
     </div>
   );
 };
