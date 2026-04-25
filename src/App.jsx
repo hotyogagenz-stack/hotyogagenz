@@ -9,7 +9,6 @@ import YogaCollage from './components/YogaCollage';
 import HotYoga from './components/HotYoga';
 import WhatWeHelpWith from './components/WhatWeHelpWith';
 import ServicesGrid from './components/ServicesGrid';
-import ImottiGuide from './components/ImottiGuide';
 import WhyChooseUs from './components/WhyChooseUs';
 import Testimonials from './components/Testimonials';
 import BlogPreview from './components/BlogPreview';
@@ -21,6 +20,8 @@ import Blog from './components/Blog';
 import Login from './components/Login';
 import Join from './components/Join';
 import Gallery from './components/Gallery';
+import Dashboard from './components/Dashboard';
+import RequireAuth from './auth/RequireAuth';
 
 // Home Page Component
 function HomePage({ theme, onThemeToggle }) {
@@ -39,7 +40,6 @@ function HomePage({ theme, onThemeToggle }) {
       <YogaCollage />
       <WhatWeHelpWith />
       <ServicesGrid />
-      <ImottiGuide />
       <WhyChooseUs />
       <Testimonials />
       <BlogPreview />
@@ -128,6 +128,21 @@ function GalleryPage({ theme, onThemeToggle }) {
   );
 }
 
+// Dashboard Page Component (Protected)
+function DashboardPage({ theme, onThemeToggle }) {
+  return (
+    <div className="app-root">
+      <Header theme={theme} onThemeToggle={onThemeToggle} />
+      <div className="dashboard-page">
+        <div className="container">
+          <Dashboard />
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
 export default function App() {
   const [theme, setTheme] = useState('dark');
 
@@ -178,6 +193,14 @@ export default function App() {
         <Route
           path="/gallery"
           element={<GalleryPage theme={theme} onThemeToggle={handleThemeToggle} />}
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth>
+              <DashboardPage theme={theme} onThemeToggle={handleThemeToggle} />
+            </RequireAuth>
+          }
         />
       </Routes>
     </Router>

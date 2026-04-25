@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import authBg from '../assets/auth-bg.png';
+import { useAuth } from '../auth/AuthContext';
+import { getFirebaseErrorMessage } from '../firebase/errors';
 
 export default function Join({ theme, onThemeToggle }) {
   const navigate = useNavigate();
+  const { signUp, user, isConfigured } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,6 +16,12 @@ export default function Join({ theme, onThemeToggle }) {
     confirmPassword: '',
     agreeTerms: false
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (user) navigate('/dashboard');
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -22,11 +31,26 @@ export default function Join({ theme, onThemeToggle }) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Registration attempt:', formData);
-    if (formData.password === formData.confirmPassword) {
-      navigate('/login');
+    setError(null);
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await signUp({
+        email: formData.email,
+        password: formData.password,
+        displayName: formData.name
+      });
+      navigate('/dashboard');
+    } catch (err) {
+      setError(getFirebaseErrorMessage(err));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -118,6 +142,14 @@ export default function Join({ theme, onThemeToggle }) {
               <p className="auth-card-subtitle">Start your 14-day free trial today</p>
             </div>
 
+            {!isConfigured && (
+              <div className="auth-alert auth-alert-warn">
+                Firebase isn’t configured yet. Add env vars in <code>hotyogagenz/.env</code> (see{' '}
+                <code>hotyogagenz/.env.example</code>).
+              </div>
+            )}
+            {error && <div className="auth-alert auth-alert-error">{error}</div>}
+
             <form onSubmit={handleSubmit} className="auth-form">
               <div className="auth-form-group">
                 <label htmlFor="name">Full Name</label>
@@ -190,8 +222,8 @@ export default function Join({ theme, onThemeToggle }) {
                 </label>
               </div>
 
-              <button type="submit" className="auth-btn auth-btn-primary">
-                <span>Create Account</span>
+              <button type="submit" className="auth-btn auth-btn-primary" disabled={submitting}>
+                <span>{submitting ? 'Creating...' : 'Create Account'}</span>
                 <svg className="auth-btn-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -214,4 +246,3 @@ export default function Join({ theme, onThemeToggle }) {
     </div>
   );
 }
-
