@@ -28,14 +28,30 @@ const galleryItems = [
   },
   {
     id: 4,
-    type: 'video',
-    url: 'https://player.vimeo.com/external/371433846.sd.mp4?s=231da7903b9073369a4897c770c06a928913b730&profile_id=164&oauth2_token_id=57447761',
-    title: 'Morning Flow',
+    type: 'image',
+    url: 'https://karmaticyoga.com/wp-content/uploads/2026/03/What-Is-Iyengar-Yoga-1-1024x536.webp',
+    title: 'Iyengar Yoga',
+    category: 'Practice',
+    description: 'Alignment-focused practice inspired by Iyengar Yoga.'
+  },
+  {
+    id: 5,
+    type: 'image',
+    url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNorKSFpgAqAt_Z4rsDtt7Xj2Q-nD3d3c62A&s',
+    title: 'Yoga Inspiration',
+    category: 'Mindfulness',
+    description: 'A mindful moment to reset and breathe.'
+  },
+  {
+    id: 6,
+  type: 'youtube',
+  youtubeId: 'GNNg30vnxaU',
+  title: 'Morning Flow',
     category: 'Practice',
     description: 'A beautiful start to your day.'
   },
   {
-    id: 5,
+    id: 7,
     type: 'image',
     url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80',
     title: 'Sun Salutation',
@@ -43,10 +59,18 @@ const galleryItems = [
     description: 'Welcoming the light with open hearts.'
   },
   {
-    id: 6,
-    type: 'video',
-    url: 'https://player.vimeo.com/external/459389137.sd.mp4?s=9106037e8c3725b8254881075d9e51928a7e02f5&profile_id=164&oauth2_token_id=57447761',
-    title: 'Breath Work',
+    id: 8,
+    type: 'youtube',
+    youtubeId: 'tQjuoLAjUPc',
+    title: 'Iyengar Yoga Video',
+    category: 'Practice',
+    description: 'Watch and learn: a guided Iyengar Yoga session.'
+  },
+  {
+    id: 9,
+  type: 'youtube',
+  youtubeId: 'AnAXJmjVLzs',
+  title: 'Breath Work',
     category: 'Mindfulness',
     description: 'Deep diving into the power of breath.'
   }
@@ -61,7 +85,7 @@ export default function Gallery() {
   const filteredItems = galleryItems.filter(item => {
     if (filter === 'All') return true;
     if (filter === 'Photos') return item.type === 'image';
-    if (filter === 'Videos') return item.type === 'video';
+  if (filter === 'Videos') return item.type === 'video' || item.type === 'youtube';
     return item.category === filter;
   });
 
@@ -112,6 +136,17 @@ export default function Gallery() {
                 <div className="gallery-card">
                   {item.type === 'image' ? (
                     <img src={item.url} alt={item.title} />
+                  ) : item.type === 'youtube' ? (
+                    <div className="video-placeholder">
+                      <img
+                        src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
+                        alt={item.title}
+                        loading="lazy"
+                      />
+                      <div className="play-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                      </div>
+                    </div>
                   ) : (
                     <div className="video-placeholder">
                       <video src={item.url} muted loop onMouseOver={e => e.target.play()} onMouseOut={e => {e.target.pause(); e.target.currentTime = 0;}} />
@@ -151,6 +186,16 @@ export default function Gallery() {
               <button className="close-lightbox" onClick={() => setSelectedItem(null)}>×</button>
               {selectedItem.type === 'image' ? (
                 <img src={selectedItem.url} alt={selectedItem.title} />
+              ) : selectedItem.type === 'youtube' ? (
+                <div className="lightbox-video">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${selectedItem.youtubeId}?autoplay=1&rel=0`}
+                    title={selectedItem.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
               ) : (
                 <video src={selectedItem.url} controls autoPlay />
               )}
