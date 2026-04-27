@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import Header from './components/Header';
 import Hero from './components/Hero';
 import CursorTrail from './components/CursorTrail';
+import ScrollToTop from './components/ScrollToTop';
 import TrustStrip from './components/TrustStrip';
 import YogaSlider from './components/YogaSlider';
 import YogaCollage from './components/YogaCollage';
@@ -326,6 +327,7 @@ export default function App() {
   return (
     <Router>
       <CursorTrail />
+  <ScrollToTop />
       <Routes>
         <Route
           path="/"
